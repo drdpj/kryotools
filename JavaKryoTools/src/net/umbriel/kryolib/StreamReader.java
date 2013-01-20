@@ -16,10 +16,51 @@
  */
 package net.umbriel.kryolib;
 
+import java.io.*;
+
 /**
  * @author daniel
+ * Generates a kryoflux stream object
  *
  */
 public class StreamReader {
 
+	private File directory;
+	private Stream parsedStream;
+	
+	/**
+	 * @param d Directory containing kryoflux stream
+	 */
+	public StreamReader(File d) {
+		setDirectory(d);
+		processStream();
+	}
+
+	private void processStream() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public File getDirectory() {
+		return directory;
+	}
+
+	public void setDirectory(File directory) {
+		this.directory = directory;
+	}
+
+	/**
+	 * @return the parsed stream
+	 */
+	public Stream getParsedStream() {
+		return parsedStream;
+	}
+
+	/**
+	 * @param parsedStream the parsedStream to set
+	 */
+	public void setParsedStream(Stream parsedStream) {
+		this.parsedStream = parsedStream;
+	}
+	
 }

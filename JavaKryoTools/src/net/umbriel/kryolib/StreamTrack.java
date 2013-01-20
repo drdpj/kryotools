@@ -1,3 +1,6 @@
+package net.umbriel.kryolib;
+
+import java.util.ArrayList;
 /**
  *     Copyright (C) 2013  Daniel Jameson
 
@@ -14,16 +17,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
-package net.umbriel.kryolib;
-
-import java.util.ArrayList;
 
 /**
  * @author daniel
  *
  */
-public class Stream {
-
-	private ArrayList<StreamTrack> tracks;
+public class StreamTrack {
 	
+	private ArrayList<Long> fluxes;
+	private ArrayList<Index> indexes;
+
 }
