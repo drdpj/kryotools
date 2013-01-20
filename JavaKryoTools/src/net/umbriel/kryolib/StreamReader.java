@@ -34,18 +34,27 @@ public class StreamReader {
 	 * @param d Directory containing kryoflux stream
 	 */
 	public StreamReader(File d) throws InvalidStreamException {
+		String trackName = "track";
+		String suffix = ".raw";
 		setDirectory(d);
-		processStream();
+		// Check if it's a directory
+		if (!directory.isDirectory()) throw new InvalidStreamException("Not a directory.");
+		// Check if at least one track file is within directory...
+		File check = new File(directory,trackName+"00.0"+suffix);
+		if (!check.exists()) throw new InvalidStreamException("No stream found.");
+		try {
+			processStream();
+		} catch (InvalidStreamException e) { 
+			throw e; //chuck upwards
+		}
 	}
 
-	private void processStream() {
-		// TODO Auto-generated method stub
+	private void processStream() throws InvalidStreamException {
+		parsedStream = new Stream();
+		
 		
 	}
 
-	protected File getDirectory() {
-		return directory;
-	}
 
 	protected void setDirectory(File directory) {
 		this.directory = directory;
@@ -58,11 +67,5 @@ public class StreamReader {
 		return parsedStream;
 	}
 
-	/**
-	 * @param parsedStream the parsedStream to set
-	 */
-	protected void setParsedStream(Stream parsedStream) {
-		this.parsedStream = parsedStream;
-	}
-	
+
 }
