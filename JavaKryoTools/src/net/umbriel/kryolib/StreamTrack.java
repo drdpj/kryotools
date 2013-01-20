@@ -24,7 +24,45 @@ import java.util.ArrayList;
  */
 public class StreamTrack {
 	
-	private ArrayList<Long> fluxes;
-	private ArrayList<Index> indexes;
+	private Double sampleClock;
+	private Double indexClock;
+	private String infoText;
+	private ArrayList<Long> fluxes;   //All of the fluxes
+	private ArrayList<Index> indexes; //Indexes
+	
+	/**
+	 * Fluxes are stored as longs and each one is the number of clock ticks
+	 * between 
+	 * 
+	 * @return ArrayList<Long> of fluxes
+	 */
+	public ArrayList<Long> getFluxes() {
+		return fluxes;
+	}
+	/**
+	 * @param Sets an ArrayList of fluxes
+	 */
+	public void setFluxes(ArrayList<Long> fluxes) {
+		this.fluxes = fluxes;
+	}
+	/**
+	 * @return Indexes for the track.
+	 */
+	public ArrayList<Index> getIndexes() {
+		return indexes;
+	}
+	/**
+	 * @param indexes set a new ArrayList of indexes
+	 */
+	public void setIndexes(ArrayList<Index> indexes) {
+		this.indexes = indexes;
+	}
+	
+	/**
+	 * @return Number of reads of this track
+	 */
+	public Integer trackReads() {
+		return indexes.size()-1;
+	}
 
 }

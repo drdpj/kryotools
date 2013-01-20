@@ -19,11 +19,43 @@ package net.umbriel.kryolib;
 import java.util.ArrayList;
 
 /**
+ * 
+ * Class to represent a single kryoflux stream.
  * @author daniel
  *
  */
 public class Stream {
 
 	private ArrayList<StreamTrack> tracks;
+	
+	/**
+	 * No arguments for constructor.
+	 */
+	
+	public Stream() {
+		tracks = new ArrayList<StreamTrack>();
+	}
+
+	/**
+	 * @return ArrayList of all the tracks in the stream.
+	 */
+	public ArrayList<StreamTrack> getTracks() {
+		return tracks;
+	}
+
+	/**
+	 * @param tracks ArrayList of tracks for this stream object.
+	 */
+	public void setTracks(ArrayList<StreamTrack> tracks) {
+		this.tracks = tracks;
+	}
+	
+	/**
+	 * @param index - track to return
+	 * @return a StreamTrack object containing the requested track
+	 */
+	public StreamTrack getTrack(int index) {
+		return tracks.get(index);
+	}
 	
 }
