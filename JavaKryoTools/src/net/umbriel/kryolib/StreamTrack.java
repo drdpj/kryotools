@@ -30,6 +30,15 @@ public class StreamTrack {
 	private ArrayList<Long> fluxes;   //All of the fluxes
 	private ArrayList<Index> indexes; //Indexes
 	
+	
+	public StreamTrack() {
+		setSampleClock(0.0);
+		setIndexClock(0.0);
+		setInfoText("");
+		fluxes = new ArrayList<Long>();
+		indexes = new ArrayList<Index>();
+	}
+	
 	/**
 	 * Fluxes are stored as longs and each one is the number of clock ticks
 	 * between 
@@ -42,7 +51,8 @@ public class StreamTrack {
 	/**
 	 * @param Sets an ArrayList of fluxes
 	 */
-	public void setFluxes(ArrayList<Long> fluxes) {
+
+	protected void setFluxes(ArrayList<Long> fluxes) {
 		this.fluxes = fluxes;
 	}
 	/**
@@ -54,7 +64,7 @@ public class StreamTrack {
 	/**
 	 * @param indexes set a new ArrayList of indexes
 	 */
-	public void setIndexes(ArrayList<Index> indexes) {
+	protected void setIndexes(ArrayList<Index> indexes) {
 		this.indexes = indexes;
 	}
 	
@@ -63,6 +73,48 @@ public class StreamTrack {
 	 */
 	public Integer trackReads() {
 		return indexes.size()-1;
+	}
+
+	/**
+	 * @return the sampleClock
+	 */
+	public Double getSampleClock() {
+		return sampleClock;
+	}
+
+	/**
+	 * @param sampleClock the sampleClock to set
+	 */
+	public void setSampleClock(Double sampleClock) {
+		this.sampleClock = sampleClock;
+	}
+
+	/**
+	 * @return the indexClock
+	 */
+	public Double getIndexClock() {
+		return indexClock;
+	}
+
+	/**
+	 * @param indexClock the indexClock to set
+	 */
+	public void setIndexClock(Double indexClock) {
+		this.indexClock = indexClock;
+	}
+
+	/**
+	 * @return the infoText
+	 */
+	public String getInfoText() {
+		return infoText;
+	}
+
+	/**
+	 * @param infoText the infoText to set
+	 */
+	public void setInfoText(String infoText) {
+		this.infoText = infoText;
 	}
 
 }

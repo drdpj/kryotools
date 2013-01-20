@@ -18,9 +18,11 @@ package net.umbriel.kryolib;
 
 import java.io.*;
 
+import net.umbriel.kryolib.exceptions.InvalidStreamException;
+
 /**
  * @author daniel
- * Generates a kryoflux stream object
+ * Generates a kryoflux stream object from a valid stream directory
  *
  */
 public class StreamReader {
@@ -31,7 +33,7 @@ public class StreamReader {
 	/**
 	 * @param d Directory containing kryoflux stream
 	 */
-	public StreamReader(File d) {
+	public StreamReader(File d) throws InvalidStreamException {
 		setDirectory(d);
 		processStream();
 	}
@@ -41,11 +43,11 @@ public class StreamReader {
 		
 	}
 
-	public File getDirectory() {
+	protected File getDirectory() {
 		return directory;
 	}
 
-	public void setDirectory(File directory) {
+	protected void setDirectory(File directory) {
 		this.directory = directory;
 	}
 
@@ -59,7 +61,7 @@ public class StreamReader {
 	/**
 	 * @param parsedStream the parsedStream to set
 	 */
-	public void setParsedStream(Stream parsedStream) {
+	protected void setParsedStream(Stream parsedStream) {
 		this.parsedStream = parsedStream;
 	}
 	
