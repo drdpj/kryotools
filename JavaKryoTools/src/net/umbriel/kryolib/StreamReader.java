@@ -27,6 +27,13 @@ import net.umbriel.kryolib.exceptions.InvalidStreamException;
  *
  */
 public class StreamReader {
+	
+	public static int NOP1=8;
+	public static int NOP2=9;
+	public static int NOP3=0xA;
+	public static int OVR16=0xB;
+	public static int VAL16=0xC;
+	public static int OOB=0xD;
 
 	private File directory;
 	private Stream parsedStream;
@@ -91,7 +98,53 @@ public class StreamReader {
 	}
 
 	private StreamTrack parseTrack(File f) {
-		return null;
+		StreamTrack track = new StreamTrack();
+		/*
+		 * Do the actual parsing...
+		 * The stream consists of two different data types,
+		 * flux timings and OOB (out of block) data.
+		 * First byte of a decode loop dictates how to process...
+		 * 
+		 */
+		try {
+			FileInputStream fis = new FileInputStream(f); // Here we go...
+			int readByte = 0;
+			int overflowCount =0;
+			
+			while ((readByte = fis.read()) >-1 ) { // if we're not at the end of the file...
+				Long fluxValue = (long)0;
+				
+				if (readByte < NOP1) { // new 2 byte cell value
+					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
+					overflowCount=0;
+				} else if (readByte == NOP1) { //NOP 1
+					fis.read();
+				} else if (readByte == NOP2) { //NOP 2
+					fis.read(new byte[2]);
+				} else if (readByte == NOP3) { //NOP 3
+					fis.read(new byte[3]);
+				} else if (readByte == OVR16) { //Overflow 16 
+					overflowCount++; //flux value+=0x10000
+				} else if (readByte == VAL16) { //Value16
+					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
+					
+					overflowCount=0;
+				} else if (readByte == OOB) { //OOB
+					overflowCount=0; //if overflowCount>0 here there's a problem zero it anyway
+					
+				} else if (readByte > OOB) { // new single byte cell value
+					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
+					
+					overflowCount=0;
+				}
+				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		
+		return track;
 	}
 
 	private void setDirectory(File directory) {
