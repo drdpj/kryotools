@@ -19,10 +19,62 @@ package net.umbriel.kryolib;
 
 /**
  * @author daniel
+ * Class to represent kryoflux index OOB blocks
  *
  */
 
 
 public class Index {
+	private int sPos;
+	private int timer;
+	private int sysTime;
+	
+	public Index() {
+		setSPos(0);
+		setTimer(0);
+		setSysTime(0);
+	}
 
+	/**
+	 * @return stream position
+	 */
+	public int getSPos() {
+		return sPos;
+	}
+
+	/**
+	 * @param set stream position
+	 */
+	public void setSPos(int sPos) {
+		this.sPos = sPos;
+	}
+
+	/**
+	 * @return Timer value
+	 */
+	public int getTimer() {
+		return timer;
+	}
+
+	/**
+	 * @param set Timer value
+	 */
+	public void setTimer(int timer) {
+		this.timer = timer;
+	}
+
+	/**
+	 * @return the system time when index detected
+	 */
+	public int getSysTime() {
+		return sysTime;
+	}
+
+	/**
+	 * @param set system time when index detected
+	 */
+	public void setSysTime(int sysTime) {
+		this.sysTime = sysTime;
+	}
+	
 }

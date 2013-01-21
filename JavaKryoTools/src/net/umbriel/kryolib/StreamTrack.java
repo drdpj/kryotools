@@ -29,6 +29,7 @@ public class StreamTrack {
 	private String infoText;
 	private ArrayList<Long> fluxes;   //All of the fluxes
 	private ArrayList<Index> indexes; //Indexes
+	private ArrayList<OOBBlock> oobBlocks; //Raw OOB Blocks
 	
 	
 	public StreamTrack() {
@@ -37,6 +38,7 @@ public class StreamTrack {
 		setInfoText("");
 		fluxes = new ArrayList<Long>();
 		indexes = new ArrayList<Index>();
+		setOobBlocks(new ArrayList<OOBBlock>());
 	}
 	
 	/**
@@ -115,6 +117,20 @@ public class StreamTrack {
 	 */
 	public void setInfoText(String infoText) {
 		this.infoText = infoText;
+	}
+
+	/**
+	 * @return the oobBlocks
+	 */
+	public ArrayList<OOBBlock> getOobBlocks() {
+		return oobBlocks;
+	}
+
+	/**
+	 * @param oobBlocks the oobBlocks to set
+	 */
+	public void setOobBlocks(ArrayList<OOBBlock> oobBlocks) {
+		this.oobBlocks = oobBlocks;
 	}
 
 }

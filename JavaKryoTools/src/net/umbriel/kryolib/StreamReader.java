@@ -99,6 +99,9 @@ public class StreamReader {
 
 	private StreamTrack parseTrack(File f) {
 		StreamTrack track = new StreamTrack();
+		ArrayList<Long> fluxes= track.getFluxes(); // pointer to flux arraylist...
+		ArrayList<OOBBlock> oobBlocks = track.getOobBlocks(); // pointer to the OOB Blocks
+		
 		/*
 		 * Do the actual parsing...
 		 * The stream consists of two different data types,
@@ -116,25 +119,40 @@ public class StreamReader {
 				
 				if (readByte < NOP1) { // new 2 byte cell value
 					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
+					fluxValue += readByte<<8; //Two byte, big endian...
+					fluxValue += fis.read();
+					fluxes.add(fluxValue); //Store it
 					overflowCount=0;
 				} else if (readByte == NOP1) { //NOP 1
-					fis.read();
+					fis.read(); //skip a byte
 				} else if (readByte == NOP2) { //NOP 2
-					fis.read(new byte[2]);
+					fis.read(new byte[2]); //skip two bytes
 				} else if (readByte == NOP3) { //NOP 3
-					fis.read(new byte[3]);
+					fis.read(new byte[3]); //skip three bytes
 				} else if (readByte == OVR16) { //Overflow 16 
 					overflowCount++; //flux value+=0x10000
 				} else if (readByte == VAL16) { //Value16
 					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
-					
+					fluxValue += fis.read()<<8; //upper 8 bits
+					fluxValue += fis.read(); //lower 8 bits
+					fluxes.add(fluxValue); //Store it
 					overflowCount=0;
 				} else if (readByte == OOB) { //OOB
+					OOBBlock newBlock = new OOBBlock(fis.read());
+					//Get the size over the next two bytes (little endian)
+					Integer size = (fis.read()|fis.read()<<8);
+					newBlock.setSize(size);
+					ArrayList<Integer> data = new ArrayList<Integer>(); //read the data into here
+					for (int i=0; i<size; i++) {
+						data.add(fis.read());
+					}
+					newBlock.setData(data); //set the data
+					oobBlocks.add(newBlock); //Add the block
 					overflowCount=0; //if overflowCount>0 here there's a problem zero it anyway
 					
 				} else if (readByte > OOB) { // new single byte cell value
+					fluxes.add((long)readByte); //store it
 					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
-					
 					overflowCount=0;
 				}
 				
