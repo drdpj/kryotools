@@ -19,7 +19,6 @@ package net.umbriel.kryolib;
 import java.io.*;
 import java.util.regex.*;
 import java.util.*;
-import net.umbriel.kryolib.exceptions.InvalidStreamException;
 
 /**
  * @author daniel
@@ -157,7 +156,9 @@ public class StreamReader {
 				}
 				
 			}
+			fis.close();
 		} catch (IOException e) {
+
 			e.printStackTrace();
 		}
 

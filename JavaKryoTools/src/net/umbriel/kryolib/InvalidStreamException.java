@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
-package net.umbriel.kryolib.exceptions;
+package net.umbriel.kryolib;
 
 /**
  * Thrown by StreamReader if there's a problem with the stream files.
