@@ -17,7 +17,8 @@
 package net.umbriel.kryolib;
 
 import java.io.*;
-
+import java.util.regex.*;
+import java.util.*;
 import net.umbriel.kryolib.exceptions.InvalidStreamException;
 
 /**
@@ -29,18 +30,18 @@ public class StreamReader {
 
 	private File directory;
 	private Stream parsedStream;
+
 	
 	/**
 	 * @param d Directory containing kryoflux stream
 	 */
 	public StreamReader(File d) throws InvalidStreamException {
-		String trackName = "track";
-		String suffix = ".raw";
+
 		setDirectory(d);
 		// Check if it's a directory
 		if (!directory.isDirectory()) throw new InvalidStreamException("Not a directory.");
 		// Check if at least one track file is within directory...
-		File check = new File(directory,trackName+"00.0"+suffix);
+		File check = new File(directory,"track00.0.raw");
 		if (!check.exists()) throw new InvalidStreamException("No stream found.");
 		try {
 			processStream();
@@ -50,13 +51,50 @@ public class StreamReader {
 	}
 
 	private void processStream() throws InvalidStreamException {
-		parsedStream = new Stream();
+		Pattern trackPattern = Pattern.compile("track(\\d{2})\\.(\\d)\\.raw");
+		parsedStream = new Stream(); //Somewhere to store all of this
+		File[] files = directory.listFiles(); // get the files
+		Integer sides = 0; // only side 0 initially...
+		Integer tracks = Integer.MIN_VALUE;
+
+		/*
+		 * From the files array we want to get the maximum tracks
+		 * and the maximum sides..
+		 *  
+		 */
+				
+		for (int i=0; i< files.length; i++) {
+			Matcher trackMatch = trackPattern.matcher(files[i].getName());
+			if (trackMatch.matches()) {
+				if (trackMatch.group(2).equals("1")) sides = 1; // double sided
+				tracks = Math.max(Integer.parseInt(trackMatch.group(1)),tracks);
+			}
+		}
+		
+		// Set up the loop to process the disk
+		
+		for (int i=0; i<tracks+1; i++) { //tracks
+			for (int j=0; j<sides+1; j++) { //sides
+				String trackName = "track"+String.format("%02d", i)+"."+j+".raw";
+				if (Utils.DEBUG) {
+					System.out.println("Processing "+trackName);
+				}
+				File currentFile = 
+						new File(directory.getPath(),trackName);
+				parsedStream.getTracks().add(parseTrack(currentFile));
+				
+			}
+
+		}
 		
 		
 	}
 
+	private StreamTrack parseTrack(File f) {
+		return null;
+	}
 
-	protected void setDirectory(File directory) {
+	private void setDirectory(File directory) {
 		this.directory = directory;
 	}
 

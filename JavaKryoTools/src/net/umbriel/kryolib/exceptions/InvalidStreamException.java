@@ -17,6 +17,9 @@
 package net.umbriel.kryolib.exceptions;
 
 /**
+ * Thrown by StreamReader if there's a problem with the stream files.
+ * Message will reveal precise issue.
+ * 
  * @author daniel
  *
  */
