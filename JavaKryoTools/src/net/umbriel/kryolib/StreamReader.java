@@ -96,10 +96,11 @@ public class StreamReader {
 		
 	}
 
-	private StreamTrack parseTrack(File f) {
+	private StreamTrack parseTrack(File f) throws InvalidStreamException {
 		StreamTrack track = new StreamTrack();
 		ArrayList<Long> fluxes= track.getFluxes(); // pointer to flux arraylist...
 		ArrayList<OOBBlock> oobBlocks = track.getOobBlocks(); // pointer to the OOB Blocks
+		ArrayList<Index> indexes = track.getIndexes(); // pointer to the indexes
 		
 		/*
 		 * Do the actual parsing...
@@ -157,6 +158,44 @@ public class StreamReader {
 				
 			}
 			fis.close();
+			
+			/*
+			 * Track is now read in, all OOBs in place. 
+			 * Indexes now need to be identified and recorded
+			 * and if the header has timing info, that needs to be
+			 * added.
+			 * 
+			 */
+			
+			Iterator<OOBBlock> iter = oobBlocks.iterator();
+			while (iter.hasNext()) {
+				OOBBlock block = iter.next();
+				if (block.getType()==OOBBlock.INDEX) {
+					//Data block should be 12 bytes, little-endian...
+					Index index = new Index();
+					ArrayList<Integer> data = block.getData();
+					if (data.size()!=12) throw new InvalidStreamException("Index wrong size");
+					//Stream position
+					index.setSPos(data.get(0)+(data.get(1)<<8)+(data.get(2)<<16)+(data.get(3)<<24));
+					//SCK
+					index.setSysTime(data.get(4)+(data.get(5)<<8)+(data.get(6)<<16)+(data.get(7)<<24));
+					//ICK
+					index.setTimer(data.get(8)+(data.get(9)<<8)+(data.get(10)<<16)+(data.get(11)<<24));
+					track.getIndexes().add(index); //add it to the track...
+				} else if (block.getType()==OOBBlock.INFO) { //infoblock
+					StringBuffer info = new StringBuffer();
+					Iterator<Integer> iter2 = block.getData().iterator();
+					while (iter2.hasNext()) {
+						info.append((char)iter2.next().intValue());
+					}
+					track.setInfoText(info.toString());
+					//Parse out sck and ick
+					
+					
+				} // Not worrying about any other block types...
+			}
+			
+			
 		} catch (IOException e) {
 
 			e.printStackTrace();

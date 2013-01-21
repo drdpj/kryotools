@@ -20,14 +20,15 @@ package net.umbriel.kryolib;
 /**
  * @author daniel
  * Class to represent kryoflux index OOB blocks
+ * Uses longs to ensure that everything remains +ve...
  *
  */
 
 
 public class Index {
-	private int sPos;
-	private int timer;
-	private int sysTime;
+	private long sPos;
+	private long timer;
+	private long sysTime;
 	
 	public Index() {
 		setSPos(0);
@@ -38,42 +39,42 @@ public class Index {
 	/**
 	 * @return stream position
 	 */
-	public int getSPos() {
+	public long getSPos() {
 		return sPos;
 	}
 
 	/**
 	 * @param set stream position
 	 */
-	public void setSPos(int sPos) {
+	public void setSPos(long sPos) {
 		this.sPos = sPos;
 	}
 
 	/**
 	 * @return Timer value
 	 */
-	public int getTimer() {
+	public long getTimer() {
 		return timer;
 	}
 
 	/**
 	 * @param set Timer value
 	 */
-	public void setTimer(int timer) {
+	public void setTimer(long timer) {
 		this.timer = timer;
 	}
 
 	/**
 	 * @return the system time when index detected
 	 */
-	public int getSysTime() {
+	public long getSysTime() {
 		return sysTime;
 	}
 
 	/**
 	 * @param set system time when index detected
 	 */
-	public void setSysTime(int sysTime) {
+	public void setSysTime(long sysTime) {
 		this.sysTime = sysTime;
 	}
 	
