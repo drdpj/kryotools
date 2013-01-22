@@ -84,6 +84,8 @@ public class StreamReader {
 				String trackName = "track"+String.format("%02d", i)+"."+j+".raw";
 				if (Utils.DEBUG) {
 					System.out.println("Processing "+trackName);
+				} else {
+					System.out.print(".");
 				}
 				File currentFile = 
 						new File(directory.getPath(),trackName);
@@ -101,6 +103,8 @@ public class StreamReader {
 		ArrayList<Long> fluxes= track.getFluxes(); // pointer to flux arraylist...
 		ArrayList<OOBBlock> oobBlocks = track.getOobBlocks(); // pointer to the OOB Blocks
 		ArrayList<Index> indexes = track.getIndexes(); // pointer to the indexes
+		Pattern sckPat = Pattern.compile(".*sck\\=(\\d+\\.\\d+),.*");
+		Pattern ickPat = Pattern.compile(".*ick\\=(\\d+\\.\\d+).*");
 		
 		/*
 		 * Do the actual parsing...
@@ -170,7 +174,7 @@ public class StreamReader {
 			Iterator<OOBBlock> iter = oobBlocks.iterator();
 			while (iter.hasNext()) {
 				OOBBlock block = iter.next();
-				if (block.getType()==OOBBlock.INDEX) {
+				if (block.getType()==OOBBlock.INDEX) { //indexes
 					//Data block should be 12 bytes, little-endian...
 					Index index = new Index();
 					ArrayList<Integer> data = block.getData();
@@ -181,7 +185,7 @@ public class StreamReader {
 					index.setSysTime(data.get(4)+(data.get(5)<<8)+(data.get(6)<<16)+(data.get(7)<<24));
 					//ICK
 					index.setTimer(data.get(8)+(data.get(9)<<8)+(data.get(10)<<16)+(data.get(11)<<24));
-					track.getIndexes().add(index); //add it to the track...
+					indexes.add(index); //add it to the track...
 				} else if (block.getType()==OOBBlock.INFO) { //infoblock
 					StringBuffer info = new StringBuffer();
 					Iterator<Integer> iter2 = block.getData().iterator();
@@ -189,8 +193,19 @@ public class StreamReader {
 						info.append((char)iter2.next().intValue());
 					}
 					track.setInfoText(info.toString());
-					//Parse out sck and ick
-					
+
+					/*
+					 * Parse out sck and ick - could be one regexp, but no guarantee
+					 * format of this block will remain the same...
+					 */
+					Matcher match = sckPat.matcher(info);
+					if (match.matches()) {
+						track.setSampleClock(Double.parseDouble(match.group(1)));
+					}
+					match = ickPat.matcher(info);
+					if (match.matches()) {
+						track.setIndexClock(Double.parseDouble(match.group(1)));
+					}
 					
 				} // Not worrying about any other block types...
 			}
