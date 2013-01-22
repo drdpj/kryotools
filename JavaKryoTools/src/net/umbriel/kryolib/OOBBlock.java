@@ -20,6 +20,7 @@ public class OOBBlock {
 	private int type; //OOB type
  	private int size; //OOB header
  	private ArrayList<Integer> data; //Data as array of bytes
+ 	private long strPos; //stream position
  	
  	public OOBBlock(int type) {
  		this.setType(type);
@@ -65,6 +66,20 @@ public class OOBBlock {
 	 */
 	public void setData(ArrayList<Integer> data) {
 		this.data = data;
+	}
+
+	/**
+	 * @return the stream position
+	 */
+	public long getStrPos() {
+		return strPos;
+	}
+
+	/**
+	 * @param strPos set stream position
+	 */
+	public void setStrPos(long strPos) {
+		this.strPos = strPos;
 	}
  	
  	

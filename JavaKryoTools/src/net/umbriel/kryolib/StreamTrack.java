@@ -27,7 +27,7 @@ public class StreamTrack {
 	private Double sampleClock;
 	private Double indexClock;
 	private String infoText;
-	private ArrayList<Long> fluxes;   //All of the fluxes
+	private ArrayList<Flux> fluxes;   //All of the fluxes
 	private ArrayList<Index> indexes; //Indexes
 	private ArrayList<OOBBlock> oobBlocks; //Raw OOB Blocks
 	
@@ -36,7 +36,7 @@ public class StreamTrack {
 		setSampleClock(0.0);
 		setIndexClock(0.0);
 		setInfoText("");
-		fluxes = new ArrayList<Long>();
+		fluxes = new ArrayList<Flux>();
 		indexes = new ArrayList<Index>();
 		setOobBlocks(new ArrayList<OOBBlock>());
 	}
@@ -47,14 +47,14 @@ public class StreamTrack {
 	 * 
 	 * @return ArrayList<Long> of fluxes
 	 */
-	public ArrayList<Long> getFluxes() {
+	public ArrayList<Flux> getFluxes() {
 		return fluxes;
 	}
 	/**
 	 * @param Sets an ArrayList of fluxes
 	 */
 
-	protected void setFluxes(ArrayList<Long> fluxes) {
+	protected void setFluxes(ArrayList<Flux> fluxes) {
 		this.fluxes = fluxes;
 	}
 	/**

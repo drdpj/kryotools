@@ -29,7 +29,7 @@ import java.util.*;
 
 final class Utils {
 
-	final static Boolean DEBUG = false;
+	final static Boolean DEBUG = true;
 	
 	final static Integer maxIntValue(ArrayList<Integer> ints) {
 		Integer maxValue = Integer.MIN_VALUE;

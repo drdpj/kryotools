@@ -26,7 +26,7 @@ import java.util.*;
  *
  */
 public class StreamReader {
-	
+
 	public static int NOP1=8;
 	public static int NOP2=9;
 	public static int NOP3=0xA;
@@ -37,7 +37,7 @@ public class StreamReader {
 	private File directory;
 	private Stream parsedStream;
 
-	
+
 	/**
 	 * @param d Directory containing kryoflux stream
 	 */
@@ -68,7 +68,7 @@ public class StreamReader {
 		 * and the maximum sides..
 		 *  
 		 */
-				
+
 		for (int i=0; i< files.length; i++) {
 			Matcher trackMatch = trackPattern.matcher(files[i].getName());
 			if (trackMatch.matches()) {
@@ -76,9 +76,9 @@ public class StreamReader {
 				tracks = Math.max(Integer.parseInt(trackMatch.group(1)),tracks);
 			}
 		}
-		
+
 		// Set up the loop to process the disk
-		
+
 		for (int i=0; i<tracks+1; i++) { //tracks
 			for (int j=0; j<sides+1; j++) { //sides
 				String trackName = "track"+String.format("%02d", i)+"."+j+".raw";
@@ -90,22 +90,22 @@ public class StreamReader {
 				File currentFile = 
 						new File(directory.getPath(),trackName);
 				parsedStream.getTracks().add(parseTrack(currentFile));
-				
+
 			}
 
 		}
-		
-		
+
+
 	}
 
 	private StreamTrack parseTrack(File f) throws InvalidStreamException {
 		StreamTrack track = new StreamTrack();
-		ArrayList<Long> fluxes= track.getFluxes(); // pointer to flux arraylist...
+		ArrayList<Flux> fluxes= track.getFluxes(); // pointer to flux arraylist...
 		ArrayList<OOBBlock> oobBlocks = track.getOobBlocks(); // pointer to the OOB Blocks
 		ArrayList<Index> indexes = track.getIndexes(); // pointer to the indexes
 		Pattern sckPat = Pattern.compile(".*sck\\=(\\d+\\.\\d+),.*");
 		Pattern ickPat = Pattern.compile(".*ick\\=(\\d+\\.\\d+).*");
-		
+
 		/*
 		 * Do the actual parsing...
 		 * The stream consists of two different data types,
@@ -117,52 +117,64 @@ public class StreamReader {
 			FileInputStream fis = new FileInputStream(f); // Here we go...
 			int readByte = 0;
 			int overflowCount =0;
-			
+			long streamPos =0;
+
 			while ((readByte = fis.read()) >-1 ) { // if we're not at the end of the file...
+
 				Long fluxValue = (long)0;
-				
+
 				if (readByte < NOP1) { // new 2 byte cell value
 					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
 					fluxValue += readByte<<8; //Two byte, big endian...
 					fluxValue += fis.read();
-					fluxes.add(fluxValue); //Store it
+					fluxes.add(new Flux(fluxValue, streamPos)); //Store it
+					streamPos+=2; //Stream position +2
 					overflowCount=0;
-				} else if (readByte == NOP1) { //NOP 1
-					fis.read(); //skip a byte
+				} else if (readByte == NOP1) { //NOP 1 
+					streamPos++; //NOPs count as stream position...
 				} else if (readByte == NOP2) { //NOP 2
-					fis.read(new byte[2]); //skip two bytes
+					fis.read(); //skip two bytes
+					streamPos+=2; //Stream Position +2
 				} else if (readByte == NOP3) { //NOP 3
-					fis.read(new byte[3]); //skip three bytes
+					fis.read(new byte[2]); //skip three bytes
+					streamPos+=3; //Stream Position +=3
 				} else if (readByte == OVR16) { //Overflow 16 
 					overflowCount++; //flux value+=0x10000
+					streamPos++;
 				} else if (readByte == VAL16) { //Value16
 					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
 					fluxValue += fis.read()<<8; //upper 8 bits
 					fluxValue += fis.read(); //lower 8 bits
-					fluxes.add(fluxValue); //Store it
+					fluxes.add(new Flux(fluxValue,streamPos)); //Store it
+					streamPos+=3;
 					overflowCount=0;
 				} else if (readByte == OOB) { //OOB
 					OOBBlock newBlock = new OOBBlock(fis.read());
 					//Get the size over the next two bytes (little endian)
+					newBlock.setStrPos(streamPos);
 					Integer size = (fis.read()|fis.read()<<8);
 					newBlock.setSize(size);
+
 					ArrayList<Integer> data = new ArrayList<Integer>(); //read the data into here
 					for (int i=0; i<size; i++) {
 						data.add(fis.read());
+
 					}
 					newBlock.setData(data); //set the data
 					oobBlocks.add(newBlock); //Add the block
 					overflowCount=0; //if overflowCount>0 here there's a problem zero it anyway
-					
+
 				} else if (readByte > OOB) { // new single byte cell value
-					fluxes.add((long)readByte); //store it
+					fluxes.add(new Flux((long)readByte, streamPos)); //store it
 					fluxValue = 0x10000 * (long) overflowCount; //deal with overflow
+					streamPos++;
 					overflowCount=0;
 				}
-				
+
+
 			}
 			fis.close();
-			
+
 			/*
 			 * Track is now read in, all OOBs in place. 
 			 * Indexes now need to be identified and recorded
@@ -170,7 +182,7 @@ public class StreamReader {
 			 * added.
 			 * 
 			 */
-			
+
 			Iterator<OOBBlock> iter = oobBlocks.iterator();
 			while (iter.hasNext()) {
 				OOBBlock block = iter.next();
@@ -186,6 +198,7 @@ public class StreamReader {
 					//ICK
 					index.setTimer(data.get(8)+(data.get(9)<<8)+(data.get(10)<<16)+(data.get(11)<<24));
 					indexes.add(index); //add it to the track...
+
 				} else if (block.getType()==OOBBlock.INFO) { //infoblock
 					StringBuffer info = new StringBuffer();
 					Iterator<Integer> iter2 = block.getData().iterator();
@@ -206,17 +219,24 @@ public class StreamReader {
 					if (match.matches()) {
 						track.setIndexClock(Double.parseDouble(match.group(1)));
 					}
-					
-				} // Not worrying about any other block types...
+
+				} else if (block.getType()==OOBBlock.READ) {
+						ArrayList<Integer> data = block.getData();
+						long position=(data.get(0)+(data.get(1)<<8)+(data.get(2)<<16)+(data.get(3)<<24));
+						if (position!=block.getStrPos()) {
+							throw new InvalidStreamException("Data missing in stream.");
+						}
+
+				}
 			}
-			
-			
+
+
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
 
-		
+
 		return track;
 	}
 
