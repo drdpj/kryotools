@@ -29,6 +29,7 @@ public class Index {
 	private long sPos;
 	private long timer;
 	private long sysTime;
+	private int fIndex;
 	
 	public Index() {
 		setSPos(0);
@@ -76,6 +77,20 @@ public class Index {
 	 */
 	public void setSysTime(long sysTime) {
 		this.sysTime = sysTime;
+	}
+
+	/**
+	 * @return the array index of the first flux after this index
+	 */
+	public int getFluxIndex() {
+		return fIndex;
+	}
+
+	/**
+	 * @param set the index of the first flux after this index
+	 */
+	public void setFluxIndex(int fIndex) {
+		this.fIndex = fIndex;
 	}
 	
 }

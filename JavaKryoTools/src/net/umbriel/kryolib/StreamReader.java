@@ -220,14 +220,41 @@ public class StreamReader {
 						track.setIndexClock(Double.parseDouble(match.group(1)));
 					}
 
+					/**
+					 * The positions recorded in the block data for streamread and streamend
+					 * blocks should match with where they appear in the stream. These
+					 * form a check firstly for my code being correct and secondly that
+					 * all the data that should be in the stream is present. These next
+					 * two conditional clauses catch that situation.  The stream position
+					 * encoded in index blocks is different. It relates to the position in
+					 * the stream buffer of the NEXT flux reversal after the index was 
+					 * detected.
+					 */
+					
 				} else if (block.getType()==OOBBlock.READ) {
-						ArrayList<Integer> data = block.getData();
-						long position=(data.get(0)+(data.get(1)<<8)+(data.get(2)<<16)+(data.get(3)<<24));
-						if (position!=block.getStrPos()) {
-							throw new InvalidStreamException("Data missing in stream.");
-						}
+					ArrayList<Integer> data = block.getData();
+					long position=(data.get(0)+(data.get(1)<<8)+(data.get(2)<<16)+(data.get(3)<<24));
+					if (position!=block.getStrPos()) {
+						throw new InvalidStreamException("Data missing in stream.");
+					}
 
+				} else if (block.getType()==OOBBlock.END) {
+					ArrayList<Integer> data = block.getData();
+					long position=(data.get(0)+(data.get(1)<<8)+(data.get(2)<<16)+(data.get(3)<<24));
+					if (position!=block.getStrPos()) {
+						throw new InvalidStreamException("Data missing in stream.");
+					}
 				}
+				/*
+				// Sort the indexes and times...
+				Iterator<Index> indexIterator = indexes.iterator();
+				while (indexIterator.hasNext()) {
+					Index currentIndex = indexIterator.next();
+					Iterator<Flux> fluxIterator =fluxes.iterator();
+					while (fluxIterator.hasNext()) {
+						Flux currentFlux = fluxIterator.next();
+					}
+				}*/
 			}
 
 
