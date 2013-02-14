@@ -230,7 +230,7 @@ public class StreamReader {
 					 * the stream buffer of the NEXT flux reversal after the index was 
 					 * detected.
 					 */
-					
+
 				} else if (block.getType()==OOBBlock.READ) {
 					ArrayList<Integer> data = block.getData();
 					long position=(data.get(0)+(data.get(1)<<8)+(data.get(2)<<16)+(data.get(3)<<24));
@@ -245,16 +245,19 @@ public class StreamReader {
 						throw new InvalidStreamException("Data missing in stream.");
 					}
 				}
-				/*
-				// Sort the indexes and times...
-				Iterator<Index> indexIterator = indexes.iterator();
-				while (indexIterator.hasNext()) {
-					Index currentIndex = indexIterator.next();
-					Iterator<Flux> fluxIterator =fluxes.iterator();
-					while (fluxIterator.hasNext()) {
-						Flux currentFlux = fluxIterator.next();
-					}
-				}*/
+
+			}
+			// Give the indexes a position in the flux stream...
+			// Not using iterators as they're much slower...
+			int fluxCount=0;
+			for (int i=0; i<indexes.size(); i++) {
+				Index currentIndex = indexes.get(i);
+				long position = currentIndex.getSPos();
+				while (fluxes.get(fluxCount).getStreamPos()<position) {
+					fluxCount++;
+				}
+				currentIndex.setFluxIndex(fluxCount);
+				
 			}
 
 
