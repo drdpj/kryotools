@@ -254,10 +254,14 @@ public class StreamReader {
 				Index currentIndex = indexes.get(i);
 				long position = currentIndex.getSPos();
 				while (fluxes.get(fluxCount).getStreamPos()<position) {
-					fluxCount++;
+
+						fluxCount++;
+						if (fluxCount==fluxes.size()) {
+							break;
+						}
 				}
 				currentIndex.setFluxIndex(fluxCount);
-				
+
 			}
 
 
