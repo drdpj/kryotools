@@ -1,5 +1,7 @@
 package net.umbriel.kryolib;
 
+import java.util.BitSet;
+
 public class FDCEmulator {
 
 	/**
@@ -9,7 +11,7 @@ public class FDCEmulator {
 	 */
 	
 	/**
-	 * 
+	 * Store bits in a BitSet...
 	 * Cell size?
 	 * Some notes:
 	 * FM encoding
@@ -40,6 +42,10 @@ public class FDCEmulator {
 	
 	public int nextBit() {
 		return 0;
+	}
+	
+	public BitSet getBits() {
+		return null;
 	}
 	
 }

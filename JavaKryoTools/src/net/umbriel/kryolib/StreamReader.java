@@ -36,6 +36,9 @@ public class StreamReader {
 
 	private File directory;
 	private Stream parsedStream;
+	private Integer tracks=Integer.MIN_VALUE; //Minimum to start with...
+	private Integer sides=0; //Only one initially...
+
 
 
 	/**
@@ -56,12 +59,16 @@ public class StreamReader {
 		}
 	}
 
+	
+	/**
+	 * This checks the number of tracks and how many sides there are...
+	 * @throws InvalidStreamException
+	 */
+	
 	private void processStream() throws InvalidStreamException {
 		Pattern trackPattern = Pattern.compile("track(\\d{2})\\.(\\d)\\.raw");
 		//parsedStream = new Stream(); //Somewhere to store all of this
 		File[] files = directory.listFiles(); // get the files
-		Integer sides = 0; // only side 0 initially...
-		Integer tracks = Integer.MIN_VALUE;
 
 		/*
 		 * From the files array we want to get the maximum tracks
@@ -76,25 +83,37 @@ public class StreamReader {
 				tracks = Math.max(Integer.parseInt(trackMatch.group(1)),tracks);
 			}
 		}
+	}
+
+	/**
+	 * get a specific track - we don't want to return the whole
+	 * disk as it's basically just too darn big.
+	 * @param t Track Number
+	 * @param s Side (0 or 1)
+	 * @return
+	 */
+	StreamTrack getTrack(Integer t, Integer s) {
 
 		// Set up the loop to process the disk
-		StreamTrack t;
-		for (int i=0; i<tracks+1; i++) { //tracks
-			for (int j=0; j<sides+1; j++) { //sides
-				String trackName = "track"+String.format("%02d", i)+"."+j+".raw";
-				if (Utils.DEBUG) {
-					System.out.println("Processing "+trackName);
-				} else {
-					System.out.print(".");
-				}
-				File currentFile = 
-						new File(directory.getPath(),trackName);
-				t =  TrackStreamReader.parseTrack(currentFile);
-				//Process that here...
+		StreamTrack st = null;
 
-			}
-
+		String trackName = "track"+String.format("%02d", t)+"."+s+".raw";
+		if (Utils.DEBUG) {
+			System.out.println("Processing "+trackName);
+		} else {
+			System.out.print(".");
 		}
+		File currentFile = 
+				new File(directory.getPath(),trackName);
+		try {
+			st =  TrackStreamReader.parseTrack(currentFile);
+		} catch (InvalidStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//Process that here...
+
+		return st;
 
 
 	}
@@ -110,6 +129,24 @@ public class StreamReader {
 	 */
 	public Stream getParsedStream() {
 		return parsedStream;
+	}
+
+
+	/**
+	 * 
+	 * @return number of tracks in directory
+	 */
+	public Integer getNumberOfTracks() {
+		return tracks;
+	}
+
+	/**
+	 * 
+	 * @return number of sides
+	 */
+
+	public Integer getNumberOfSides() {
+		return sides;
 	}
 
 
