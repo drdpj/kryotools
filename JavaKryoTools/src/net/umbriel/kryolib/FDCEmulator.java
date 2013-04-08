@@ -19,17 +19,19 @@ public class FDCEmulator {
 	 * 
 	 */
 	
+	private StreamTrack track;
 	
-	public FDCEmulator() {
-		
+	
+	public FDCEmulator(StreamTrack t) {
+		this.track=t;
 	}
 	
 	/**
 	 * Accepts a stream track.
 	 * @param s
 	 */
-	public void setTrack(StreamTrack s) {
-		
+	public void setTrack(StreamTrack t) {
+		this.track=t;
 	}
 	
 	/**

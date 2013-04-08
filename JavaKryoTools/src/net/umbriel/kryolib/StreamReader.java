@@ -35,7 +35,6 @@ public class StreamReader {
 	public static int OOB=0xD;
 
 	private File directory;
-	private Stream parsedStream;
 	private Integer tracks=Integer.MIN_VALUE; //Minimum to start with...
 	private Integer sides=0; //Only one initially...
 
@@ -92,7 +91,7 @@ public class StreamReader {
 	 * @param s Side (0 or 1)
 	 * @return
 	 */
-	StreamTrack getTrack(Integer t, Integer s) {
+	public StreamTrack getTrack(Integer t, Integer s) {
 
 		// Set up the loop to process the disk
 		StreamTrack st = null;
@@ -124,12 +123,6 @@ public class StreamReader {
 		this.directory = directory;
 	}
 
-	/**
-	 * @return the parsed stream
-	 */
-	public Stream getParsedStream() {
-		return parsedStream;
-	}
 
 
 	/**
