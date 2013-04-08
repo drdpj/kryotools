@@ -8,14 +8,31 @@ public class FDCEmulator {
 	 *  
 	 */
 	
+	/**
+	 * 
+	 * Cell size?
+	 * Some notes:
+	 * FM encoding
+	 * MFM encoding
+	 * 
+	 */
+	
 	
 	public FDCEmulator() {
 		
 	}
 	
+	/**
+	 * Accepts a stream track.
+	 * @param s
+	 */
 	public void setTrack(StreamTrack s) {
 		
 	}
+	
+	/**
+	 * return to start of track.
+	 */
 	
 	public void zeroIndex() {
 		
