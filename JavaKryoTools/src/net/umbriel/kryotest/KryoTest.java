@@ -20,6 +20,8 @@ public class KryoTest {
 			StreamTrack track = sr.getTrack(0, 0);
 			System.out.println(track.getInfoText());
 			System.out.println(track.getSampleClock());
+			System.out.println(track.getIndexClock());
+			FDCEmulator fdc = new FDCEmulator(track);
 		} catch (InvalidStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
