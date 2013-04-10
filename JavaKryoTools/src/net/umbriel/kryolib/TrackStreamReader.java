@@ -187,8 +187,16 @@ public class TrackStreamReader {
 				}
 
 			}
+			
+			// Sort out the flux positions in microseconds as easier to deal with
+			double clock = track.getSampleClock();
+			for (int i=0; i<fluxes.size(); i++) {
+				fluxes.get(i).setMicroSecondTime(clock);
+			}
+			
 			// Give the indexes a position in the flux stream...
 			// Not using iterators as they're much slower...
+	
 			int fluxCount=0;
 			for (int i=0; i<indexes.size(); i++) {
 				Index currentIndex = indexes.get(i);

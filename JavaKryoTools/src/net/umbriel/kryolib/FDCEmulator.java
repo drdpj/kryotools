@@ -13,7 +13,7 @@ public class FDCEmulator {
 	
 	/**
 	 * Store bits in a BitSet...
-	 * Cell size?
+	 * Cell size? 2000ns
 	 * Some notes:
 	 * FM encoding? 2000 (11), 4000 (01)
 	 * MFM encoding? 4000 (01) , 6000 (001), 8000 (0001) gaps...
@@ -30,7 +30,8 @@ public class FDCEmulator {
 	private Double rpm = 0.0;
 	private Double maxRpm = 0.0;
 	private Double minRpm = 0.0;
-	private Double cellsize = 2000.00; //This will be half if HD...
+	private Double cellsize = 2.0; //This will be half if HD...
+	private Integer tolerance = 10; //Percentage tolerance for cell-size
 	
 	
 	public FDCEmulator(StreamTrack t) {
@@ -69,7 +70,7 @@ public class FDCEmulator {
 			
 			ArrayList<Flux> fluxes = track.getFluxes();
 			for (int i=firstIndex; i<lastIndex; i++) {
-				System.out.println((fluxes.get(i).getTime()/track.getSampleClock())/(0.000000001));
+				System.out.println((fluxes.get(i).getTime()/track.getSampleClock())*100000); //in micro-s
 			}
 		} //else throw some error.
 		
