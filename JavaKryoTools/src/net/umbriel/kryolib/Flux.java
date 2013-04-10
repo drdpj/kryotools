@@ -24,7 +24,7 @@ public class Flux {
 	
 	private long time;
 	private long streamPos;
-	private double microSecondTime;
+	private double nanoSecondTime;
 	
 	public Flux (long time,long streamPos) {
 		this.time=time;
@@ -59,16 +59,16 @@ public class Flux {
 	 * 
 	 * @return
 	 */
-	public double getMicroSecondTime() {
-		return microSecondTime;
+	public double getNanoSecondTime() {
+		return nanoSecondTime;
 	}
 	
 	/**
 	 * 
 	 * @param microSecondTime time from preceeding flux in us.
 	 */
-	public void setMicroSecondTime(Double sampleClock) {
-		this.microSecondTime = (this.getTime()/sampleClock) * 100000;
+	public void setNanoSecondTime(Double sampleClock) {
+		this.nanoSecondTime = (this.getTime()/sampleClock) * 1000000000;
 	}
 	
 

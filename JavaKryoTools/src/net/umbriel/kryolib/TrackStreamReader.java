@@ -191,7 +191,7 @@ public class TrackStreamReader {
 			// Sort out the flux positions in microseconds as easier to deal with
 			double clock = track.getSampleClock();
 			for (int i=0; i<fluxes.size(); i++) {
-				fluxes.get(i).setMicroSecondTime(clock);
+				fluxes.get(i).setNanoSecondTime(clock);
 			}
 			
 			// Give the indexes a position in the flux stream...
