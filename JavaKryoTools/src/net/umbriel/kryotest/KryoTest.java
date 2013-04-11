@@ -23,14 +23,28 @@ public class KryoTest {
 			System.out.println(track.getSampleClock());
 			System.out.println(track.getIndexClock());
 			FDCEmulator fdc = new FDCEmulator(track);
-			byte[] bytes=fdc.getTrackBytes();
-			for (int i=0; i<bytes.length; i++) {
-				int number = bytes[i] & 0xFF;
-				//System.out.print(Integer.toBinaryString(number));
-				//System.out.print(Integer.toHexString(number));
+			String byteString = fdc.getBinaryString();
+			String mfmTrackMark = "0"+Integer.toBinaryString(0x4489);
+			String fmTrackMark = Integer.toBinaryString(0xFFFF)+Integer.toBinaryString(0xAAAA);
+			mfmTrackMark = mfmTrackMark+mfmTrackMark;
+			System.out.println(mfmTrackMark);
+			int mfmTrackIndexLocation = byteString.indexOf(mfmTrackMark);
+			int fmTrackIndexLocation = byteString.indexOf(fmTrackMark);
+			System.out.println("mfm Index location:"+mfmTrackIndexLocation);
+			System.out.println("fm Index location:"+fmTrackIndexLocation);
+			System.out.println(byteString.substring(mfmTrackIndexLocation, mfmTrackIndexLocation+60));
+			byte[] bytes = fdc.getTrackByteArray(mfmTrackIndexLocation);
+			for (int i=0; i<20;i++) {
+				int t = bytes[i] & 0xFF;
+				String bin = Integer.toBinaryString(t);
+				if (bin.length()<8) {
+					while (bin.length()<8) {
+						bin = "0"+bin;
+					}
+				}
+				System.out.print(bin);
 			}
-			System.out.println(bytes.length);
-
+			System.out.print("\n");
 		} catch (InvalidStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

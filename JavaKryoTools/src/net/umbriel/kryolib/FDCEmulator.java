@@ -3,6 +3,7 @@ package net.umbriel.kryolib;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 public class FDCEmulator {
 
@@ -30,12 +31,12 @@ public class FDCEmulator {
 	private Double minRpm = 0.0;
 	private int clockCentre = 2000;
 	private Integer tolerance = 10; //Percentage tolerance for cell-size
-	private ByteArrayOutputStream arrayOfBytes = new ByteArrayOutputStream();
-	private byte[] trackBytes;
+	private ArrayList<Boolean> binaryStream;
 
 
 	public FDCEmulator(StreamTrack t) {
 		this.track=t;
+		binaryStream = new ArrayList<Boolean>();
 		processTrack();
 	}
 
@@ -45,6 +46,7 @@ public class FDCEmulator {
 	 */
 	public void setTrack(StreamTrack t) {
 		this.track=t;
+
 		processTrack();
 	}
 
@@ -72,28 +74,20 @@ public class FDCEmulator {
 
 			int clockedZeros=0; // number of 0s we've encountered...
 			int clock=clockCentre;
-			StringBuffer bits = new StringBuffer();
 			double heldOverTime = 0.0;
 			double clockMin = ((clockCentre*(100-tolerance))/100);
 			double clockMax = ((clockCentre*(100+tolerance))/100);
-			int byteCounter=0;
-			BitSet smallSet = new BitSet();
 			// Start at the start...
 			for (int i=firstIndex; i<lastIndex; i++) {
 				double time = fluxes.get(i).getNanoSecondTime();
 				time+= heldOverTime; // We're not snapping each window each time...
 				clockedZeros=0;
 				while (time>=0) {
-					if (byteCounter==8) {
-						byteCounter=0;
-						arrayOfBytes.write(new Byte(smallSet.toByteArray()[0]));
-					}
+
 					time -= clock;
 					if (time>=clock/2) {
 						clockedZeros++;
-						bits.append('0');
-						smallSet.clear(byteCounter);
-						byteCounter++;
+						binaryStream.add(new Boolean(false));
 					} else {
 						if ((clockedZeros>=1) && (clockedZeros<=3)) { //In sync... Adjust by 10% phase mismatch
 							int diff = (int) (time/(clockedZeros+1));
@@ -103,17 +97,12 @@ public class FDCEmulator {
 
 							clock = (int)(Math.max(clockMin, Math.min(clockMax, clock)));
 						}
-						smallSet.set(byteCounter);
-						byteCounter++;
+						binaryStream.add(new Boolean(true));
 						heldOverTime=time/2;
 						time=-1;
 					}
 				}
 			}
-			if (byteCounter>0) {
-				arrayOfBytes.write(smallSet.toByteArray()[0]);
-			}
-			trackBytes = arrayOfBytes.toByteArray(); // This is it as it stands...
 
 
 		} //else throw some error.
@@ -162,19 +151,39 @@ public class FDCEmulator {
 		this.minRpm = minRpm;
 	}
 
+	public String getBinaryString() {
+		StringBuilder builder = new StringBuilder();
+		for (int i=0; i<binaryStream.size();i++) {
+			builder.append(binaryStream.get(i).booleanValue()?"1":"0");
+		}
+		return builder.toString();
+	}
+	
+	
+	public ArrayList getBinaryList() {
+		return binaryStream;
+	}
+	
 	/**
-	 * @return the trackBytes
+	 * Returns the contents of the bitstream as an array of bytes
+	 * @param index index in the bitstream to start from
+	 * @return byte array of index stream
 	 */
-	public byte[] getTrackBytes() {
+	public byte[] getTrackByteArray(int index) {
+		ByteArrayOutputStream arrayOfBytes = new ByteArrayOutputStream();
+		for (int i=index; i<binaryStream.size()-8;i+=8) {
+			StringBuilder builder = new StringBuilder();
+			for (int j=0; j<8; j++) {
+				builder.append(binaryStream.get(i+j).booleanValue()?"1":"0");
+			}
+			arrayOfBytes.write(Integer.parseInt(builder.toString(),2));
+		}
+
+
+		byte[] trackBytes = arrayOfBytes.toByteArray();
 		return trackBytes;
 	}
 
-	/**
-	 * @param trackBytes the trackBytes to set
-	 */
-	public void setTrackBytes(byte[] trackBytes) {
-		this.trackBytes = trackBytes;
-	}
 
 
 
