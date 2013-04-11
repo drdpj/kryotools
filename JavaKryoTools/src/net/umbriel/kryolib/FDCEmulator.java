@@ -2,8 +2,7 @@ package net.umbriel.kryolib;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
+
 
 public class FDCEmulator {
 
@@ -24,8 +23,7 @@ public class FDCEmulator {
 	 */
 
 	private StreamTrack track;
-	private Boolean allRevolutions = false;
-	private Boolean isProcessed = false;
+
 	private Double rpm = 0.0;
 	private Double maxRpm = 0.0;
 	private Double minRpm = 0.0;
@@ -34,10 +32,30 @@ public class FDCEmulator {
 	private ArrayList<Boolean> binaryStream;
 
 
+	
+	/**
+	 * @return the clock centre (2000 = DD, 1000 = QD)
+	 */
+	public int getClockCentre() {
+		return clockCentre;
+	}
+
+	/**
+	 * @param clockCentre the clockCentre to set (2000 = DD, 1000 = QD)
+	 */
+	public void setClockCentre(int clockCentre) {
+		this.clockCentre = clockCentre;
+		binaryStream = new ArrayList<Boolean>();
+	}
+
 	public FDCEmulator(StreamTrack t) {
 		this.track=t;
 		binaryStream = new ArrayList<Boolean>();
 		processTrack();
+	}
+	
+	public FDCEmulator() {
+		binaryStream=new ArrayList<Boolean>();
 	}
 
 	/**
@@ -51,9 +69,6 @@ public class FDCEmulator {
 	}
 
 
-	public BitSet getBits() {
-		return null;
-	}
 
 	/**
 	 * This processes the track - if you change any parameters it can be run
@@ -160,7 +175,7 @@ public class FDCEmulator {
 	}
 	
 	
-	public ArrayList getBinaryList() {
+	public ArrayList<Boolean> getBinaryList() {
 		return binaryStream;
 	}
 	
