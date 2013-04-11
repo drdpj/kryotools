@@ -4,6 +4,7 @@ import net.umbriel.kryolib.*;
 
 
 import java.io.*;
+import java.math.BigInteger;
 
 public class KryoTest {
 
@@ -22,6 +23,14 @@ public class KryoTest {
 			System.out.println(track.getSampleClock());
 			System.out.println(track.getIndexClock());
 			FDCEmulator fdc = new FDCEmulator(track);
+			byte[] bytes=fdc.getTrackBytes();
+			for (int i=0; i<bytes.length; i++) {
+				int number = bytes[i] & 0xFF;
+				//System.out.print(Integer.toBinaryString(number));
+				//System.out.print(Integer.toHexString(number));
+			}
+			System.out.println(bytes.length);
+
 		} catch (InvalidStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

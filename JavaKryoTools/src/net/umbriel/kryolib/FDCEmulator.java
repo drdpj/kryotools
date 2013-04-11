@@ -31,6 +31,7 @@ public class FDCEmulator {
 	private int clockCentre = 2000;
 	private Integer tolerance = 10; //Percentage tolerance for cell-size
 	private ByteArrayOutputStream arrayOfBytes = new ByteArrayOutputStream();
+	private byte[] trackBytes;
 
 
 	public FDCEmulator(StreamTrack t) {
@@ -112,7 +113,7 @@ public class FDCEmulator {
 			if (byteCounter>0) {
 				arrayOfBytes.write(smallSet.toByteArray()[0]);
 			}
-			byte[] bytes = arrayOfBytes.toByteArray(); // This is it as it stands...
+			trackBytes = arrayOfBytes.toByteArray(); // This is it as it stands...
 
 
 		} //else throw some error.
@@ -159,6 +160,20 @@ public class FDCEmulator {
 	 */
 	public void setMinRpm(Double minRpm) {
 		this.minRpm = minRpm;
+	}
+
+	/**
+	 * @return the trackBytes
+	 */
+	public byte[] getTrackBytes() {
+		return trackBytes;
+	}
+
+	/**
+	 * @param trackBytes the trackBytes to set
+	 */
+	public void setTrackBytes(byte[] trackBytes) {
+		this.trackBytes = trackBytes;
 	}
 
 
