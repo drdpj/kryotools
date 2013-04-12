@@ -36,9 +36,6 @@ public final class APDWriter {
 		try {
 			StreamReader sr = new StreamReader(f);
 			int maxTracks = sr.getNumberOfTracks();
-			if (maxTracks>80) {
-				maxTracks=80;
-			}
 			int maxSides = sr.getNumberOfSides();
 			int arraySize = maxTracks*(maxSides);
 
@@ -46,8 +43,9 @@ public final class APDWriter {
 			byte[][] fmTracks = new byte[arraySize][];
 			byte[][] mfmTracks = new byte[arraySize][];
 			byte[][] hdMfmTracks = new byte[arraySize][];
-			for (int side=0; side<maxSides; side++) { //for each side
-				for (int track=0; track<maxTracks; track++) { //for each track
+			for (int track=0; track<maxTracks; track++) { //for each track
+				for (int side=0; side<maxSides; side++) { //for each side
+
 
 					int currentTrack = track*2 + side;
 					//We try fm,mfm then quad density if that way inclined...

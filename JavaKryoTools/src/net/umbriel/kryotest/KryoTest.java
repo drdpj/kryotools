@@ -29,7 +29,7 @@ public class KryoTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		APDWriter.createAPD(new File("zarch"));
+		APDWriter.createAPD(new File("Hero Quest"));
 
 	}
 
