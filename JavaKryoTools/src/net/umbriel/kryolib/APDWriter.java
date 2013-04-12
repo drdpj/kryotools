@@ -57,9 +57,10 @@ public final class APDWriter {
 
 					if (fmIndex!=-1) {
 						//deal with the fm string
-						System.out.println("FM track found:"+fmIndex);
+
 						fmTracks[currentTrack]=fdc.getTrackByteArray(fmIndex);
 						int length=fmTracks[currentTrack].length*8;
+						System.out.println("FM track found:"+fmIndex+" Length:"+length);
 						int headerPos =8+(12*currentTrack); //Position in the header for the tracklength
 						header=updateHeader(header, headerPos, length); //update the header
 
@@ -70,9 +71,10 @@ public final class APDWriter {
 					int mfmIndex=trackBitString.indexOf(mfmTrackMark); //look for MFM track index
 					if (mfmIndex!=-1) {
 						//deal with mfm string
-						System.out.println("MFM track found:"+mfmIndex);
+						
 						mfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex);
 						int length = mfmTracks[currentTrack].length*8;
+						System.out.println("MFM track found:"+mfmIndex+" Length:"+length);
 						int headerPos =12+(12*currentTrack); //Position in the header for the tracklength
 						header=updateHeader(header, headerPos, length); //update the header
 					} 
@@ -84,9 +86,10 @@ public final class APDWriter {
 					mfmIndex=trackBitString.indexOf(mfmTrackMark); //look for MFM track...
 					if (mfmIndex !=-1) { //If we find one...
 						//deal with HD mfm...
-						System.out.println("HD MFM track found:"+mfmIndex);
+						
 						hdMfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex);
 						int length=hdMfmTracks[currentTrack].length*8; 
+						System.out.println("HD MFM track found:"+mfmIndex+" Length:"+length);
 						int headerPos =16+(12*currentTrack); //Position in the header for the tracklength
 						header=updateHeader(header, headerPos, length);
 					} 
