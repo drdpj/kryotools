@@ -50,7 +50,7 @@ public final class APDWriter {
 					int currentTrack = track*2 + side;
 					//We try fm,mfm then quad density if that way inclined...
 					StreamTrack st = sr.getTrack(track, side); //got the track...
-					System.out.println("Track:"+track+" Side:"+side);
+					System.out.println("Track:"+track+" Side:"+side+" APD Track:"+currentTrack);
 					fdc.setClockCentre(4000); //set the clock for SD (4000ns)
 					fdc.setTrack(st); //set and parse the track
 
@@ -60,7 +60,7 @@ public final class APDWriter {
 					if (fmIndex!=-1) {
 						//deal with the fm string
 
-						fmTracks[currentTrack]=fdc.getTrackByteArray(fmIndex+fmTrackMark.length());
+						fmTracks[currentTrack]=fdc.getTrackByteArray(fmIndex);
 						int length=fmTracks[currentTrack].length*8;
 						System.out.println("FM track found:"+fmIndex+" Length:"+length);
 						int headerPos =8+(12*currentTrack); //Position in the header for the tracklength
@@ -74,7 +74,7 @@ public final class APDWriter {
 					if (mfmIndex!=-1) {
 						//deal with mfm string
 
-						mfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex+mfmTrackMark.length());
+						mfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex);
 						int length = mfmTracks[currentTrack].length*8;
 						System.out.println("MFM track found:"+mfmIndex+" Length:"+length);
 						int headerPos =12+(12*currentTrack); //Position in the header for the tracklength
@@ -89,7 +89,7 @@ public final class APDWriter {
 					if (mfmIndex !=-1) { //If we find one...
 						//deal with HD mfm...
 
-						hdMfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex+mfmTrackMark.length());
+						hdMfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex);
 						int length=hdMfmTracks[currentTrack].length*8; 
 						System.out.println("HD MFM track found:"+mfmIndex+" Length:"+length);
 						int headerPos =16+(12*currentTrack); //Position in the header for the tracklength
@@ -107,7 +107,7 @@ public final class APDWriter {
 			//Stream header
 			go.write(header);
 			//Stream tracks
-			for (int i=0; i<arraySize;i++) {
+			for (int i=0; i<fmTracks.length;i++) {
 				//fm
 				if (fmTracks[i]!=null) {
 					go.write(fmTracks[i]);
