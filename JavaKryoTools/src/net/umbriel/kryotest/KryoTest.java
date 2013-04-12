@@ -13,7 +13,7 @@ public class KryoTest {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+		/*
 		try {
 			
 			
@@ -28,8 +28,8 @@ public class KryoTest {
 		} catch (InvalidStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		//APDWriter.createAPD(new File("zarch"));
+		}*/
+		APDWriter.createAPD(new File("zarch"));
 
 	}
 

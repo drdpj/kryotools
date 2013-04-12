@@ -50,21 +50,25 @@ public final class APDWriter {
 					//We try fm,mfm then quad density if that way inclined...
 					StreamTrack st = sr.getTrack(track, side); //got the track...
 					System.out.println("Track:"+track+" Side:"+side);
-					fdc.setClockCentre(2000); //set the clock for SD/DD (2000ns)
+					fdc.setClockCentre(4000); //set the clock for SD (4000ns)
 					fdc.setTrack(st); //set and parse the track
 					
 					String trackBitString = fdc.getBinaryString();
 					int fmIndex=trackBitString.indexOf(fmTrackMark); //look for FM track index
-					int mfmIndex=trackBitString.indexOf(mfmTrackMark); //look for MFM track index
+
 					if (fmIndex!=-1) {
 						//deal with the fm string
-						System.out.println("FM track found");
+						System.out.println("FM track found:"+fmIndex);
 						fmTracks[currentTrack]=fdc.getTrackByteArray(fmIndex);
 						int length=fmTracks[currentTrack].length;
 						int headerPos =8+(12*currentTrack); //Position in the header for the tracklength
 						header=updateHeader(header, headerPos, length); //update the header
 
 					} 
+					fdc.setClockCentre(2000); //set for DD
+					fdc.processTrack(); //reprocess
+					trackBitString=fdc.getBinaryString();
+					int mfmIndex=trackBitString.indexOf(mfmTrackMark); //look for MFM track index
 					if (mfmIndex!=-1) {
 						//deal with mfm string
 						System.out.println("MFM track found:"+mfmIndex);
