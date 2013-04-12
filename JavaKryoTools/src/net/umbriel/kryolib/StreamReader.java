@@ -130,7 +130,7 @@ public class StreamReader {
 	 * @return number of tracks in directory
 	 */
 	public Integer getNumberOfTracks() {
-		return tracks;
+		return tracks+1;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class StreamReader {
 	 */
 
 	public Integer getNumberOfSides() {
-		return sides;
+		return sides+1;
 	}
 
 
