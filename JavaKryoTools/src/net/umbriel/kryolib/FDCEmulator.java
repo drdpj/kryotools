@@ -30,6 +30,7 @@ public class FDCEmulator {
 	private int clockCentre = 2000;
 	private Integer tolerance = 10; //Percentage tolerance for cell-size
 	private ArrayList<Boolean> binaryStream;
+	private int readNumber =0;
 
 
 	
@@ -41,7 +42,7 @@ public class FDCEmulator {
 	}
 
 	/**
-	 * @param clockCentre the clockCentre to set (2000 = DD, 1000 = QD)
+	 * @param clockCentre the clockCentre to set ( 4000=SD, 2000 = DD, 1000 = QD)
 	 */
 	public void setClockCentre(int clockCentre) {
 		this.clockCentre = clockCentre;
@@ -197,6 +198,20 @@ public class FDCEmulator {
 
 		byte[] trackBytes = arrayOfBytes.toByteArray();
 		return trackBytes;
+	}
+
+	/**
+	 * @return the read of the floppy that's being worked from
+	 */
+	public int getReadNumber() {
+		return readNumber;
+	}
+
+	/**
+	 * @param readNumber which read from the floppy to work from (you need to check 
+	 */
+	public void setReadNumber(int readNumber) {
+		this.readNumber = readNumber;
 	}
 
 
