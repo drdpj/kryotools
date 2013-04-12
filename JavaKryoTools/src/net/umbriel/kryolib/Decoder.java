@@ -1,6 +1,6 @@
 package net.umbriel.kryolib;
 
-import java.util.BitSet;
+import java.util.ArrayList;
 
 /**
  * Interface for mfm/fm decoders...
@@ -9,6 +9,6 @@ import java.util.BitSet;
  */
 
 public interface Decoder {
-	public Integer[] decode(BitSet b);
+	public Integer[] decode(ArrayList<Boolean> b);
 
 }

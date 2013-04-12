@@ -117,5 +117,12 @@ final class Utils {
 		return out;
 	}
 
+	final static String convertFDCBits(ArrayList<Boolean> bits) {
+		StringBuilder builder = new StringBuilder();
+		for (int i=0; i<bits.size();i++) {
+			builder.append(bits.get(i).booleanValue()?"1":"0");
+		}
+		return builder.toString();
+	}
 
 }
