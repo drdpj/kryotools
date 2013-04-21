@@ -83,8 +83,8 @@ public class FDCEmulator {
 			 */
 
 			//Let's assume we're just working with the first revolution for now...
-			int firstIndex = track.getIndexes().get(1).getFluxIndex();
-			int lastIndex = track.getIndexes().get(2).getFluxIndex();
+			int firstIndex = track.getIndexes().get(0).getFluxIndex();
+			int lastIndex = track.getIndexes().get(1).getFluxIndex();
 
 			ArrayList<Flux> fluxes = track.getFluxes();
 

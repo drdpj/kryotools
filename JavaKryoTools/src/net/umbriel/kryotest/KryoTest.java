@@ -16,12 +16,12 @@ public class KryoTest {
 		/*
 		try {
 			
-			
+		
 			StreamReader sr = new StreamReader(new File("zarch"));
 			System.out.println("There are "+sr.getNumberOfTracks()+" tracks.");
-			FDCEmulator fdc = new FDCEmulator(sr.getTrack(41, 0));
-			System.out.println(fdc.getBinaryString());
-			fdc.setClockCentre(2000);
+			FDCEmulator fdc = new FDCEmulator(sr.getTrack(40, 0));
+			//System.out.println(fdc.getBinaryString());
+			fdc.setClockCentre(4000);
 			fdc.processTrack();
 			System.out.println(fdc.getBinaryString());
 
@@ -29,7 +29,7 @@ public class KryoTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		APDWriter.createAPD(new File("Hero Quest"));
+		APDWriter.createAPD(new File("zarch"));
 
 	}
 

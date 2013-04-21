@@ -16,7 +16,7 @@ public final class APDWriter {
 		String mfmTrackMark = "0"+Integer.toBinaryString(0x4489); //Need to stick on the preceding 0
 		mfmTrackMark = mfmTrackMark+mfmTrackMark; //0x44894489
 		String fmTrackMark = Integer.toBinaryString(0xFFFF)+Integer.toBinaryString(0xAAAA); //0xFFFFAAAA
-
+		//String fmTrackMark = Integer.toBinaryString(0xFF)+Integer.toBinaryString(0xAAAAAA)+Integer.toBinaryString(0xAAAAAA); 
 
 		//FDC Emulator
 		FDCEmulator fdc = new FDCEmulator();
