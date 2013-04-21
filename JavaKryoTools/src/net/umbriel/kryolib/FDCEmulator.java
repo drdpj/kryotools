@@ -28,7 +28,7 @@ public class FDCEmulator {
 	private Double maxRpm = 0.0;
 	private Double minRpm = 0.0;
 	private int clockCentre = 2000;
-	private Integer tolerance = 10; //Percentage tolerance for cell-size
+	private Integer tolerance = 20; //Percentage tolerance for cell-size
 	private ArrayList<Boolean> binaryStream;
 	private int readNumber =0;
 
