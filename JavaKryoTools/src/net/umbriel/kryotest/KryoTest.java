@@ -17,9 +17,9 @@ public class KryoTest {
 		try {
 			
 		
-			StreamReader sr = new StreamReader(new File("zarch"));
+			StreamReader sr = new StreamReader(new File("zap!"));
 			System.out.println("There are "+sr.getNumberOfTracks()+" tracks.");
-			FDCEmulator fdc = new FDCEmulator(sr.getTrack(42, 0));
+			FDCEmulator fdc = new FDCEmulator(sr.getTrack(0, 0));
 			//System.out.println(fdc.getBinaryString());
 			fdc.setClockCentre(4000);
 			fdc.processTrack();

@@ -78,7 +78,8 @@ public class FMDecoder implements Decoder {
 			
 			if (currentByte.length()==8 && readingData) {
 				int value = Integer.parseInt(currentByte.toString(), 2);
-				System.out.print(Integer.toHexString(value & 0xFF)+",");
+				//System.out.print(Integer.toHexString(value & 0xFF)+",");
+				System.out.print((char)value);
 				byteCounter++;
 				if (byteCounter ==256) {
 					System.out.println();

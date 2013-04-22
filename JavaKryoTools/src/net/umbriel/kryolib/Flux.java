@@ -68,7 +68,10 @@ public class Flux {
 	 * @param microSecondTime time from preceeding flux in us.
 	 */
 	public void setNanoSecondTime(Double sampleClock) {
-		this.nanoSecondTime = (this.getTime()/sampleClock) * 1000000000;
+		this.nanoSecondTime = ((this.getTime()/sampleClock) * 1000000000);
+		if (Utils.DEBUG) {
+			//System.out.println(this.nanoSecondTime);
+		}
 	}
 	
 
