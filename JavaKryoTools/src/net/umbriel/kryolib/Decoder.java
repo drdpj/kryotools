@@ -9,6 +9,6 @@ import java.util.ArrayList;
  */
 
 public interface Decoder {
-	public Integer[] decode(ArrayList<Boolean> b);
+	public Integer[][] decode(ArrayList<Boolean> b);
 
 }

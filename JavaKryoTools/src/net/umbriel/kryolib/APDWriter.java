@@ -15,7 +15,7 @@ public final class APDWriter {
 		//Some things we need:
 		String mfmTrackMark = "0"+Integer.toBinaryString(0x4489); //Need to stick on the preceding 0
 		mfmTrackMark = mfmTrackMark+mfmTrackMark; //0x44894489
-		String fmTrackMark = Integer.toBinaryString(0xFFFF)+Integer.toBinaryString(0xAAAA); //0xFFFFAAAA
+		String fmTrackMark = "1111010101111110"; //0xFFFFAAAA
 		//String fmTrackMark = Integer.toBinaryString(0xFF)+Integer.toBinaryString(0xAAAAAA)+Integer.toBinaryString(0xAAAAAA); 
 
 		//FDC Emulator
@@ -60,7 +60,7 @@ public final class APDWriter {
 					if (fmIndex!=-1) {
 						//deal with the fm string
 
-						fmTracks[currentTrack]=fdc.getTrackByteArray(fmIndex);
+						fmTracks[currentTrack]=fdc.getTrackByteArray(0);
 						int length=fmTracks[currentTrack].length*8;
 						System.out.println("FM track found:"+fmIndex+" Length:"+length);
 						int headerPos =8+(12*currentTrack); //Position in the header for the tracklength
@@ -74,12 +74,13 @@ public final class APDWriter {
 					if (mfmIndex!=-1) {
 						//deal with mfm string
 
-						mfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex);
+						mfmTracks[currentTrack]=fdc.getTrackByteArray(0);
 						int length = mfmTracks[currentTrack].length*8;
 						System.out.println("MFM track found:"+mfmIndex+" Length:"+length);
 						int headerPos =12+(12*currentTrack); //Position in the header for the tracklength
 						header=updateHeader(header, headerPos, length); //update the header
 					} 
+
 
 					//quad density...
 					fdc.setClockCentre(1000); //Set the clock for HD (1000ns window)
@@ -89,7 +90,7 @@ public final class APDWriter {
 					if (mfmIndex !=-1) { //If we find one...
 						//deal with HD mfm...
 
-						hdMfmTracks[currentTrack]=fdc.getTrackByteArray(mfmIndex);
+						hdMfmTracks[currentTrack]=fdc.getTrackByteArray(0);
 						int length=hdMfmTracks[currentTrack].length*8; 
 						System.out.println("HD MFM track found:"+mfmIndex+" Length:"+length);
 						int headerPos =16+(12*currentTrack); //Position in the header for the tracklength

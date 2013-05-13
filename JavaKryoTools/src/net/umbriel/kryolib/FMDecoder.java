@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class FMDecoder implements Decoder {
 
 	@Override
-	public Integer[] decode(ArrayList<Boolean> b) {
+	public Integer[][] decode(ArrayList<Boolean> b) {
 		
 		//Marks that are important...
 		//Sector ID address Mark
