@@ -34,7 +34,7 @@ public final class APDWriter {
 
 		//check stream...
 		try {
-			StreamReader sr = new StreamReader(f);
+			StreamReader sr = new StreamReader(f); //Create the stream reader
 			int maxTracks = sr.getNumberOfTracks();
 			int maxSides = sr.getNumberOfSides();
 			int arraySize = maxTracks*(maxSides);
