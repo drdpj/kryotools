@@ -15,6 +15,9 @@ public class KryoTest {
 	public static void main(String[] args) {
 		Integer[][][] ssd = new Integer[40][][];
 		// TODO Auto-generated method stub
+		
+		CRCCalculator c = new CRCCalculator();
+		
 		SSDWriter decoder = new SSDWriter();
 		try {
 
