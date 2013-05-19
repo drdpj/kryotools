@@ -24,14 +24,15 @@ public class KryoTest {
 
 			StreamReader sr = new StreamReader(new File("zap!"));
 			System.out.println("There are "+sr.getNumberOfTracks()+" tracks.");
-			/*for (int i=0; i<80; i+=2) {
+			for (int i=0; i<80; i+=2) {
 				FDCEmulator fdc = new FDCEmulator(sr.getTrack(i, 0));
 				//System.out.println(fdc.getBinaryString());
 				fdc.setClockCentre(4000);
+				fdc.setRpm(360.0);
 				fdc.processTrack();
 				ssd[i/2]=decoder.decode(fdc.getBinaryList());
-				System.out.println(fdc.getClockCentre());
-			}/*
+				//System.out.println(fdc.getClockCentre());
+			}
 			FileOutputStream fo = new FileOutputStream("zap.ssd");
 			for (int t=0; t<40; t++) {
 				for (int s=0; s<10; s++) {
@@ -39,8 +40,8 @@ public class KryoTest {
 						fo.write(ssd[t][s][b].intValue());
 					}
 				}
-			}*/
-			FileWriter fw = new FileWriter(new File("fluxes.csv"));
+			}
+			/*FileWriter fw = new FileWriter(new File("fluxes.csv"));
 			ArrayList<Flux> fluxes = sr.getTrack(0, 0).getFluxes();
 			for (int i=0; i<fluxes.size();i++) {
 				double time = fluxes.get(i).getNanoSecondTime();
@@ -48,7 +49,7 @@ public class KryoTest {
 					fw.write(time+"\n");
 				}
 			}
-			fw.close();
+			fw.close();*/
 		} catch (InvalidStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

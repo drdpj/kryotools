@@ -23,14 +23,16 @@ public class FDCEmulator {
 	 */
 
 	private StreamTrack track;
+	private final Double baseRPM=300.0;
 
-	private Double rpm = 0.0;
+	private Double rpm = 300.0;
 	private Double maxRpm = 0.0;
 	private Double minRpm = 0.0;
 	private int clockCentre = 2000;
 	private Integer tolerance = 10; //Percentage tolerance for cell-size
 	private ArrayList<Boolean> binaryStream;
 	private int readNumber =1;
+	private Double rpmMultiplier=1.0;
 
 
 	
@@ -95,7 +97,7 @@ public class FDCEmulator {
 			double clockMax = ((clockCentre*(100+tolerance))/100);
 			// Start at the start...
 			for (int i=firstIndex; i<lastIndex; i++) {
-				double time = fluxes.get(i).getNanoSecondTime();
+				double time = fluxes.get(i).getNanoSecondTime() * rpmMultiplier;
 				time+= heldOverTime; // We're not snapping each window each time...
 				clockedZeros=0;
 				while (time>=0) {
@@ -137,6 +139,7 @@ public class FDCEmulator {
 	 */
 	public void setRpm(Double rpm) {
 		this.rpm = rpm;
+		rpmMultiplier = rpm/baseRPM;
 	}
 
 	/**
