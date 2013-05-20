@@ -138,7 +138,7 @@ public class SSDWriter implements Decoder {
 					}
 
 					
-					byteCounter=0;
+					byteCounter=0; //Got the CRC.
 
 				}
 			}

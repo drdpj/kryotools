@@ -37,10 +37,11 @@ public class KryoTest {
 			for (int t=0; t<40; t++) {
 				for (int s=0; s<10; s++) {
 					for (int b=0; b<256; b++) {
-						fo.write(ssd[t][s][b].intValue());
+						fo.write(ssd[t][s][b]);
 					}
 				}
 			}
+			fo.close();
 			/*FileWriter fw = new FileWriter(new File("fluxes.csv"));
 			ArrayList<Flux> fluxes = sr.getTrack(0, 0).getFluxes();
 			for (int i=0; i<fluxes.size();i++) {
