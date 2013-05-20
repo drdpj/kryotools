@@ -6,9 +6,11 @@ import java.util.Collections;
 public class Track {
 
 	private ArrayList<Sector> sectors;
+	private Integer trackNumber;
 	
 	public Track() {
 		setSectors(new ArrayList<Sector>());
+		setTrackNumber(0);
 	}
 
 	/**
@@ -24,6 +26,20 @@ public class Track {
 	 */
 	public void setSectors(ArrayList<Sector> sectors) {
 		this.sectors = sectors;
+	}
+
+	/**
+	 * @return the trackNumber
+	 */
+	public Integer getTrackNumber() {
+		return trackNumber;
+	}
+
+	/**
+	 * @param trackNumber the trackNumber to set
+	 */
+	public void setTrackNumber(Integer trackNumber) {
+		this.trackNumber = trackNumber;
 	}
 	
 

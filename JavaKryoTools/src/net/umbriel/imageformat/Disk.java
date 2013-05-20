@@ -5,7 +5,7 @@ public class Disk {
 	private Surface[] surface;
 	
 	public Disk() {
-		setSurface(new Surface[2]);
+		setSurface(new Surface[2]);//we only get two surfaces, honestly
 	}
 
 	/**

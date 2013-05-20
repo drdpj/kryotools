@@ -3,10 +3,16 @@ package net.umbriel.imageformat;
 import java.util.ArrayList;
 
 public class Sector implements Comparable<Sector> {
-
+	
+	final static Integer FM = 0;
+	final static Integer MFM = 1;
+	
+	private Integer encoding;
 	private Integer number;
 	private Integer headerChecksum;
 	private Integer dataChecksum;
+	private Integer trackNumber;
+	private Integer size;
 	private ArrayList<Integer> data;
 	
 	public Sector() {
@@ -14,6 +20,7 @@ public class Sector implements Comparable<Sector> {
 		number = 0xff;
 		headerChecksum=0xffff;
 		dataChecksum=0xffff;
+		encoding = Sector.FM; //default is going to be FM
 	}
 
 	/**
@@ -78,6 +85,48 @@ public class Sector implements Comparable<Sector> {
 	public int compareTo(Sector o) {
 		return (this.getNumber() < o.getNumber()) ? -1 : ((this.getNumber() == o.getNumber()) ? 0 : 1);
 
+	}
+
+	/**
+	 * @return the encoding
+	 */
+	public Integer getEncoding() {
+		return encoding;
+	}
+
+	/**
+	 * @param encoding the encoding to set
+	 */
+	public void setEncoding(Integer encoding) {
+		this.encoding = encoding;
+	}
+
+	/**
+	 * @return the trackNumber
+	 */
+	public Integer getTrackNumber() {
+		return trackNumber;
+	}
+
+	/**
+	 * @param trackNumber the trackNumber to set
+	 */
+	public void setTrackNumber(Integer trackNumber) {
+		this.trackNumber = trackNumber;
+	}
+
+	/**
+	 * @return the size
+	 */
+	public Integer getSize() {
+		return size;
+	}
+
+	/**
+	 * @param size the size to set
+	 */
+	public void setSize(Integer size) {
+		this.size = size;
 	}
 
 

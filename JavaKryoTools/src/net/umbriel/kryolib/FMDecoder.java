@@ -2,10 +2,12 @@ package net.umbriel.kryolib;
 
 import java.util.ArrayList;
 
+import net.umbriel.imageformat.Track;
+
 public class FMDecoder implements Decoder {
 
 	@Override
-	public Integer[][] decode(ArrayList<Boolean> b) {
+	public Track decode(ArrayList<Boolean> b) {
 		
 		//Marks that are important...
 		//Sector ID address Mark

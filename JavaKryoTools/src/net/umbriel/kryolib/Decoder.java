@@ -2,6 +2,8 @@ package net.umbriel.kryolib;
 
 import java.util.ArrayList;
 
+import net.umbriel.imageformat.Track;
+
 /**
  * Interface for mfm/fm decoders...
  * @author mqbssdpj
@@ -9,6 +11,6 @@ import java.util.ArrayList;
  */
 
 public interface Decoder {
-	public Integer[][] decode(ArrayList<Boolean> b);
+	public Track decode(ArrayList<Boolean> b);
 
 }
