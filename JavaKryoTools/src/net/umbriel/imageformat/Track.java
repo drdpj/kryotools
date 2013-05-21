@@ -17,10 +17,15 @@ public class Track {
 	 * @return the sectors
 	 */
 	public ArrayList<Sector> getSectors() {
-		Collections.sort(sectors); //Sort the sectors into numerical order...
 		return sectors;
 	}
 
+	public ArrayList<Sector> getSortedSectors() {
+		@SuppressWarnings("unchecked")
+		ArrayList<Sector> sortedSectors = (ArrayList<Sector>) sectors.clone();
+		Collections.sort(sortedSectors);
+		return sortedSectors;
+	}
 	/**
 	 * @param sectors the sectors to set
 	 */

@@ -41,7 +41,7 @@ public class KryoTest {
 			disk.getSurface()[0].setTracks(tracks);
 			FileOutputStream fo = new FileOutputStream("zap.ssd");
 			for (int t=0; t<tracks.size();t++) {
-				ArrayList<Sector> sectors=tracks.get(t).getSectors();
+				ArrayList<Sector> sectors=tracks.get(t).getSortedSectors();
 				for (int s=0; s<sectors.size(); s++) {
 					ArrayList<Integer> data=sectors.get(s).getData();
 					for (int d=0; d<data.size();d++) {
