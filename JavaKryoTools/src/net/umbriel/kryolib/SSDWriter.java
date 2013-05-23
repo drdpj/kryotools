@@ -25,6 +25,7 @@ public class SSDWriter implements Decoder {
 		boolean clock = true; // True when next bit is expected to be the clock
 		boolean readingSectorInfo = false; // True when in the sector header
 		boolean readingData = false; // True when reading data
+		boolean readingGap = true; //True when reading a gap
 		StringBuilder currentByte=new StringBuilder(); //Builds up byte
 		CRCCalculator crcChecker = new CRCCalculator(); //CRC calc.
 		int byteCounter =0; //Data bytes
@@ -75,6 +76,7 @@ public class SSDWriter implements Decoder {
 				currentSector = new Sector();
 				track.getSectors().add(currentSector); //Add it to the track...
 				readingData = false;
+				readingGap = false;
 				clock = true;
 				readingSectorInfo = true;
 				sectorByteCounter=0;
@@ -92,12 +94,20 @@ public class SSDWriter implements Decoder {
 				sectorData=new ArrayList<Integer>();
 				byteCounter=0;
 				readingData = true;
+				readingGap = false;
 				clock = true;
 				readingSectorInfo = false;
+				if (currentByte.length()<8) {
+					System.out.println("Truncated byte:"+Integer.parseInt(currentByte.toString(), 2));
+				}
 				currentByte.setLength(0);
 				crcChecker.reset();
 				crcChecker.updateCRC(0xFB);//CRC starts with the DM
 				//Read Data
+			}
+			if (currentByte.length()==8 && readingGap) {
+				int value = Integer.parseInt(currentByte.toString(), 2);
+				System.out.println(","+value);
 			}
 			if (currentByte.length()==8 && readingSectorInfo) {
 				int value = Integer.parseInt(currentByte.toString(), 2);
@@ -123,14 +133,15 @@ public class SSDWriter implements Decoder {
 				}
 				if (sectorByteCounter==6) { //Read through to the 2 CRC bytes. crc will be 0 if it's OK.
 					if (crcChecker.getCrc()==0) {
-						System.out.print("T:"+currentSector.getTrackNumber()+" S:"+side+" Sr:"+
+						System.out.println("T:"+currentSector.getTrackNumber()+" S:"+side+" Sr:"+
 								currentSector.getNumber()+" Size:"+
 								currentSector.getSize()+" IM CRC OK");
 					} else {
-						System.out.print("T:"+currentSector.getTrackNumber()+" S:"+side+" Sr:"+
+						System.out.println("T:"+currentSector.getTrackNumber()+" S:"+side+" Sr:"+
 								currentSector.getNumber()+" Size:"+
 								currentSector.getNumber()+" IM CRC FAIL");
 					}
+					readingGap=true;
 				}
 
 				sectorByteCounter++;
