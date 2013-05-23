@@ -27,7 +27,17 @@ public class KryoTest {
 
 			disk.getSurface()[0]=new Surface(); //surface 0...
 			ArrayList<Track> tracks = new ArrayList<Track>();
-			StreamReader sr = new StreamReader(new File("zap!"));
+			StreamReader sr = new StreamReader(new File("zarch"));
+			FDCEmulator fdc = new FDCEmulator(sr.getTrack(40, 0));
+			fdc.setClockCentre(4000);
+			fdc.processTrack();
+			Track track = decoder.decode(fdc.getBinaryList());
+			System.out.println(track.getSectors().size());
+			
+			for (int i=0; i<track.getSectors().size();i++) {
+				Sector currentSector = track.getSectors().get(i);
+			}
+			/*
 			System.out.println("There are "+sr.getNumberOfTracks()+" tracks.");
 			for (int i=0; i<80; i+=2) {
 				FDCEmulator fdc = new FDCEmulator(sr.getTrack(i, 0));
@@ -50,7 +60,7 @@ public class KryoTest {
 				}
 			}
 			
-			fo.close();
+			fo.close();*/
 			/*FileWriter fw = new FileWriter(new File("fluxes.csv"));
 			ArrayList<Flux> fluxes = sr.getTrack(0, 0).getFluxes();
 			for (int i=0; i<fluxes.size();i++) {
@@ -63,7 +73,7 @@ public class KryoTest {
 		} catch (InvalidStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		//} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -10,6 +10,10 @@ public class SSDWriter implements Decoder {
 	public Track decode(ArrayList<Boolean> b) {
 
 		//Marks that are important...
+		
+		//Index Address Mark
+		String indexMark="1111011101111010";
+		
 		//Sector ID address Mark
 		String sectorMark="1111010101111110";
 
@@ -59,11 +63,17 @@ public class SSDWriter implements Decoder {
 				check = check.substring(1, 16);
 			}
 			check=check+(currentBit.booleanValue()?"1":"0");
+			
+			if (indexMark.equals(check)) {
+				System.out.println("IAM found");
+			}
+			
 			//Are we at the start of a new sector? 
 			if (sectorMark.equals(check)) {
 				//Read sector information
 				//System.out.println("FM Sector found.");
 				currentSector = new Sector();
+				track.getSectors().add(currentSector); //Add it to the track...
 				readingData = false;
 				clock = true;
 				readingSectorInfo = true;
@@ -78,7 +88,7 @@ public class SSDWriter implements Decoder {
 
 			if (check.equals(dataMark)) {
 				//Do we have a Data address mark?
-				//System.out.println("FM Data found.");
+				System.out.print(" DAM ");
 				sectorData=new ArrayList<Integer>();
 				byteCounter=0;
 				readingData = true;
@@ -103,6 +113,7 @@ public class SSDWriter implements Decoder {
 				}
 				if (sectorByteCounter==3) {
 					currentSector.setSize(value);
+					sectorSize=0x80<<(value & 0x03); //Translate the sector size byte
 				}
 				if (sectorByteCounter==4) {
 					currentSector.setHeaderChecksum(value<<8);
@@ -113,9 +124,11 @@ public class SSDWriter implements Decoder {
 				if (sectorByteCounter==6) { //Read through to the 2 CRC bytes. crc will be 0 if it's OK.
 					if (crcChecker.getCrc()==0) {
 						System.out.print("T:"+currentSector.getTrackNumber()+" S:"+side+" Sr:"+
-								currentSector.getNumber()+" IM CRC OK");
+								currentSector.getNumber()+" Size:"+
+								currentSector.getSize()+" IM CRC OK");
 					} else {
 						System.out.print("T:"+currentSector.getTrackNumber()+" S:"+side+" Sr:"+
+								currentSector.getNumber()+" Size:"+
 								currentSector.getNumber()+" IM CRC FAIL");
 					}
 				}
@@ -128,20 +141,20 @@ public class SSDWriter implements Decoder {
 
 			if (currentByte.length()==8 && readingData) {
 				int value = Integer.parseInt(currentByte.toString(), 2);
-				if (byteCounter<256) { //don't overflow the array
+				if (byteCounter<sectorSize) { //don't overflow the array
 					sectorData.add(value);
 				}
-				if (byteCounter==256) {
+				if (byteCounter==sectorSize) { //checksum byte 1
 					currentSector.setDataChecksum(value<<8);
 				}
-				if (byteCounter==257) {
+				if (byteCounter==sectorSize+1) { //checksum byte 2
 					currentSector.setDataChecksum(currentSector.getDataChecksum()+value);
 				}
 				//System.out.print(Integer.toHexString(value & 0xFF)+",");
 				//System.out.print((char)value);
 				byteCounter++;
 				crcChecker.updateCRC(value);
-				if (byteCounter ==258) { //data unit + 2 byte CRC
+				if (byteCounter ==sectorSize+2) { //data unit + 2 byte CRC
 
 					if (crcChecker.getCrc()==0) { //If data is OK CRC will now be 0.
 						System.out.println(" Data Size="+ sectorSize+" Data CRC OK");
@@ -150,12 +163,14 @@ public class SSDWriter implements Decoder {
 					}
 
 					currentSector.setData(sectorData); //set the sector data
-					track.getSectors().add(currentSector);
-
+					readingData=false;
 				}
 			}
 		}
-
+		if (byteCounter<sectorSize+2) {
+			currentSector.setData(sectorData);
+			System.out.println(byteCounter+" bytes of data read on last sector before index.");
+		}
 		// TODO Auto-generated method stub
 		return track;
 	}
