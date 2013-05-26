@@ -70,7 +70,7 @@ public class SSDWriter implements Decoder {
 			}
 			
 			//Are we at the start of a new sector? 
-			if (sectorMark.equals(check)) {
+			if (sectorMark.equals(check) ) {
 				//Read sector information
 				//System.out.println("FM Sector found.");
 				currentSector = new Sector();
@@ -90,7 +90,7 @@ public class SSDWriter implements Decoder {
 
 			if (check.equals(dataMark)) {
 				//Do we have a Data address mark?
-				System.out.print(" DAM ");
+				//System.out.print(" DAM ");
 				sectorData=new ArrayList<Integer>();
 				byteCounter=0;
 				readingData = true;
@@ -105,10 +105,11 @@ public class SSDWriter implements Decoder {
 				crcChecker.updateCRC(0xFB);//CRC starts with the DM
 				//Read Data
 			}
+			/**
 			if (currentByte.length()==8 && readingGap) {
 				int value = Integer.parseInt(currentByte.toString(), 2);
 				System.out.println(","+value);
-			}
+			}*/
 			if (currentByte.length()==8 && readingSectorInfo) {
 				int value = Integer.parseInt(currentByte.toString(), 2);
 				if (sectorByteCounter==0) {
@@ -166,7 +167,6 @@ public class SSDWriter implements Decoder {
 				byteCounter++;
 				crcChecker.updateCRC(value);
 				if (byteCounter ==sectorSize+2) { //data unit + 2 byte CRC
-
 					if (crcChecker.getCrc()==0) { //If data is OK CRC will now be 0.
 						System.out.println(" Data Size="+ sectorSize+" Data CRC OK");
 					} else {
