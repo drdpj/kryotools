@@ -70,12 +70,15 @@ import java.util.zip.GZIPOutputStream;
 
 public final class APDWriter {
 
-	public static void createAPD(File f) {
+	public static void createAPD(File f, Boolean omitFM) {
+		if (omitFM) {
+			System.out.println("Omitting FM scan.");
+		}
 
 		//Some things we need:
 		String mfmTrackMark = "0"+Integer.toBinaryString(0x4489); //Need to stick on the preceding 0
 		mfmTrackMark = mfmTrackMark+mfmTrackMark; //0x44894489
-		String fmTrackMark = "1111010101111110"; //0xFFFFAAAA
+		String fmTrackMark = "1111010101111110"; //0xFFFFAAAA - not sure about this?
 		//String fmTrackMark = Integer.toBinaryString(0xFF)+Integer.toBinaryString(0xAAAAAA)+Integer.toBinaryString(0xAAAAAA); 
 
 		//FDC Emulator
@@ -113,9 +116,11 @@ public final class APDWriter {
 					System.out.println("Track:"+track+" Side:"+side+" APD Track:"+currentTrack);
 					fdc.setClockCentre(4000); //set the clock for SD (4000ns)
 					fdc.setTrack(st); //set and parse the track
-
+					int fmIndex=-1; //default is no FM...
 					String trackBitString = fdc.getBinaryString();
-					int fmIndex=trackBitString.indexOf(fmTrackMark); //look for FM track index
+					if (!omitFM) { //if we're not omitting FM
+						fmIndex=trackBitString.indexOf(fmTrackMark); //look for FM track index
+					}
 
 					if (fmIndex!=-1) {
 						//deal with the fm string

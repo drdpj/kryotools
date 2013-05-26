@@ -214,7 +214,7 @@ public class TrackStreamReader {
 				fluxes.get(i).setNanoSecondTime(clock);
 			}
 			
-			System.out.println(track.getInfoText());
+			//System.out.println(track.getInfoText());
 			
 
 

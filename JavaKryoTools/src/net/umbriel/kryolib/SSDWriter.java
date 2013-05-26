@@ -25,6 +25,7 @@ public class SSDWriter implements Decoder {
 		boolean clock = true; // True when next bit is expected to be the clock
 		boolean readingSectorInfo = false; // True when in the sector header
 		boolean readingData = false; // True when reading data
+		@SuppressWarnings("unused")
 		boolean readingGap = true; //True when reading a gap
 		StringBuilder currentByte=new StringBuilder(); //Builds up byte
 		CRCCalculator crcChecker = new CRCCalculator(); //CRC calc.
