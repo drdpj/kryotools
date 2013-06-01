@@ -2,7 +2,7 @@ package net.umbriel.kryolib;
 
 import java.util.ArrayList;
 
-import net.umbriel.imageformat.Track;
+import net.umbriel.kryolib.discstructure.Track;
 
 public class MFMDecoder implements Decoder {
 

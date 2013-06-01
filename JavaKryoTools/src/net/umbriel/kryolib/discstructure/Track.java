@@ -1,4 +1,4 @@
-package net.umbriel.imageformat;
+package net.umbriel.kryolib.discstructure;
 
 import java.util.ArrayList;
 import java.util.Collections;

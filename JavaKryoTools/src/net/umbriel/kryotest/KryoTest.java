@@ -1,10 +1,10 @@
 package net.umbriel.kryotest;
 
-import net.umbriel.imageformat.Disk;
-import net.umbriel.imageformat.Sector;
-import net.umbriel.imageformat.Surface;
-import net.umbriel.imageformat.Track;
 import net.umbriel.kryolib.*;
+import net.umbriel.kryolib.discstructure.Disk;
+import net.umbriel.kryolib.discstructure.Sector;
+import net.umbriel.kryolib.discstructure.Surface;
+import net.umbriel.kryolib.discstructure.Track;
 
 
 import java.io.*;

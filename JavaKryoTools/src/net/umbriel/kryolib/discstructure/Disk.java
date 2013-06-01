@@ -1,4 +1,4 @@
-package net.umbriel.imageformat;
+package net.umbriel.kryolib.discstructure;
 
 public class Disk {
 

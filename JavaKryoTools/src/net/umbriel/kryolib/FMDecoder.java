@@ -1,7 +1,8 @@
 package net.umbriel.kryolib;
 
 import java.util.ArrayList;
-import net.umbriel.imageformat.*;
+
+import net.umbriel.kryolib.discstructure.*;
 
 public class FMDecoder implements Decoder {
 
