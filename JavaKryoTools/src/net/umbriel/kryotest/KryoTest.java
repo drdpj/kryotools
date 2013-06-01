@@ -46,7 +46,7 @@ public class KryoTest {
 
 		CRCCalculator c = new CRCCalculator();
 
-		SSDWriter decoder = new SSDWriter();
+		FMDecoder decoder = new FMDecoder();
 		try {
 
 			disk.getSurface()[0]=new Surface(); //surface 0...
