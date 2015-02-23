@@ -20,6 +20,9 @@ public class FMDecoder implements Decoder {
 
 		//Data address Mark
 		String dataMark="1111010101101111";
+		
+		//Deleted address Mark
+		String deletedMark="1111010101101010";
 
 		//Empty string for checking...
 		String check = "";
@@ -99,8 +102,25 @@ public class FMDecoder implements Decoder {
 				readingGap = false;
 				clock = true;
 				readingSectorInfo = false;
-				if (currentByte.length()<8) {
-					System.out.println("Truncated byte:"+Integer.parseInt(currentByte.toString(), 2));
+				if (currentByte.length()<8 && currentByte.length()>0) {
+					//System.out.println("Truncated byte:"+Integer.parseInt(currentByte.toString(), 2));
+				}
+				currentByte.setLength(0);
+				crcChecker.reset();
+				crcChecker.updateCRC(0xFB);//CRC starts with the DM
+				//Read Data
+			}
+			if (check.equals(deletedMark)) {
+				//Do we have a Data address mark?
+				System.out.print(" Deleted Data ");
+				sectorData=new ArrayList<Integer>();
+				byteCounter=0;
+				readingData = true;
+				readingGap = false;
+				clock = true;
+				readingSectorInfo = false;
+				if (currentByte.length()<8 && currentByte.length()>0) {
+					//System.out.println("Truncated byte:"+Integer.parseInt(currentByte.toString(), 2));
 				}
 				currentByte.setLength(0);
 				crcChecker.reset();

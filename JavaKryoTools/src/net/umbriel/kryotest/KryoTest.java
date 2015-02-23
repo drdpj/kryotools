@@ -47,33 +47,38 @@ public class KryoTest {
 		CRCCalculator c = new CRCCalculator();
 
 		FMDecoder decoder = new FMDecoder();
+		
 		try {
 
 			disk.getSurface()[0]=new Surface(); //surface 0...
 			ArrayList<Track> tracks = new ArrayList<Track>();
-			StreamReader sr = new StreamReader(new File("zarch"));
-			FDCEmulator fdc = new FDCEmulator(sr.getTrack(40, 0));
+			StreamReader sr = new StreamReader(new File("Zarch"));
+			/*
+			FDCEmulator fdc = new FDCEmulator(sr.getTrack(10, 0));
 			fdc.setClockCentre(4000);
 			fdc.processTrack();
 			Track track = decoder.decode(fdc.getBinaryList());
 			//Track track = decoder.decode(finalTrack);
-			System.out.println(track.getSectors().size());
+			//System.out.println(track.getSectors().size());
 
-			for (int i=0; i<track.getSectors().size();i++) {
-				Sector currentSector = track.getSectors().get(i);
-			}
-			/*
+			//for (int i=0; i<track.getSectors().size();i++) {
+			//	Sector currentSector = track.getSectors().get(i);
+			//}
+			*/
 			System.out.println("There are "+sr.getNumberOfTracks()+" tracks.");
-			for (int i=0; i<80; i+=2) {
-				FDCEmulator fdc = new FDCEmulator(sr.getTrack(i, 0));
+			for (int i=0; i<sr.getNumberOfTracks(); i++) {
+				for (int j=0; j<2; j++) {
+				FDCEmulator fdc = new FDCEmulator(sr.getTrack(i, j));
 				//System.out.println(fdc.getBinaryString());
 				fdc.setClockCentre(4000);
-				fdc.setRpm(360.0);
+				//fdc.setRpm(360.0);
 				fdc.processTrack();
 				tracks.add(decoder.decode(fdc.getBinaryList()));
 				//System.out.println(fdc.getClockCentre());
+				}
 			}
 			disk.getSurface()[0].setTracks(tracks);
+			/*
 			FileOutputStream fo = new FileOutputStream("zap.ssd");
 			for (int t=0; t<tracks.size();t++) {
 				ArrayList<Sector> sectors=tracks.get(t).getSortedSectors();
@@ -84,7 +89,7 @@ public class KryoTest {
 					}
 				}
 			}
-
+			
 			fo.close();*/
 			/*FileWriter fw = new FileWriter(new File("fluxes.csv"));
 			ArrayList<Flux> fluxes = sr.getTrack(0, 0).getFluxes();

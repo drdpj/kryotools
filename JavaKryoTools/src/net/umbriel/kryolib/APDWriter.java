@@ -129,7 +129,9 @@ public final class APDWriter {
 						int length=fmTracks[currentTrack].length*8;
 						System.out.println("FM track found:"+fmIndex+" Length:"+length);
 						int headerPos =8+(12*currentTrack); //Position in the header for the tracklength
+						System.out.println("HeaderPos:"+Integer.toHexString(headerPos));
 						header=updateHeader(header, headerPos, length); //update the header
+
 
 					} 
 					fdc.setClockCentre(2000); //set for DD
@@ -143,7 +145,9 @@ public final class APDWriter {
 						int length = mfmTracks[currentTrack].length*8;
 						System.out.println("MFM track found:"+mfmIndex+" Length:"+length);
 						int headerPos =12+(12*currentTrack); //Position in the header for the tracklength
+						System.out.println("HeaderPos:"+Integer.toHexString(headerPos));
 						header=updateHeader(header, headerPos, length); //update the header
+
 					} 
 
 
