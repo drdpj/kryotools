@@ -52,7 +52,7 @@ public class KryoTest {
 
 			disk.getSurface()[0]=new Surface(); //surface 0...
 			ArrayList<Track> tracks = new ArrayList<Track>();
-			StreamReader sr = new StreamReader(new File("Zarch"));
+			StreamReader sr = new StreamReader(new File("literature"));
 			/*
 			FDCEmulator fdc = new FDCEmulator(sr.getTrack(10, 0));
 			fdc.setClockCentre(4000);
